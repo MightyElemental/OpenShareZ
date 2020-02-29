@@ -1,20 +1,23 @@
 package mightyelemental.opensharez;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Sound {
 
-	AudioStream stream;
+	Clip clip;
+	File audioFile;
 
-	private Sound(File f) throws FileNotFoundException, IOException {
-		stream = new AudioStream( new FileInputStream( f ) );
+	private Sound(File f) throws LineUnavailableException {
+		clip = AudioSystem.getClip();
+		audioFile = f;
 	}
 
 	public static Sound soundFromFile(String path) throws URISyntaxException {
@@ -24,13 +27,24 @@ public class Sound {
 		if (f.exists()) {
 			try {
 				return new Sound( f );
-			} catch (IOException e) {
+			} catch (LineUnavailableException e) {
 				e.printStackTrace();
 			}
 		}
 		return null;
 	}
 
-	public void play() { AudioPlayer.player.start( stream ); }
+	public void play() {
+		clip.stop();
+		clip.close();
+		clip.setMicrosecondPosition( 0 );
+		try {
+			AudioInputStream ais = AudioSystem.getAudioInputStream( audioFile );
+			clip.open( ais );
+		} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+			e.printStackTrace();
+		}
+		clip.start();
+	}
 
 }
