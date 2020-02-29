@@ -1,6 +1,7 @@
 package mightyelemental.opensharez;
 
 import java.net.URISyntaxException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -23,7 +24,20 @@ public class OpenShareZ {
 		}
 	}
 
+	public static void testIfRunning() {
+		AtomicInteger i = new AtomicInteger( 0 );
+		ProcessHandle.allProcesses()
+				.filter( ph -> ph.info().command().isPresent()
+						&& ph.info().commandLine().get().contains( "OpenShareZ" ) )
+				.forEach( (process) -> { i.addAndGet( 1 ); } );
+		if (i.get() > 1) {
+			System.out.println( "OpenShareZ is running already" );
+			System.exit( 1 );
+		}
+	}
+
 	public static void main(String[] args) {
+		testIfRunning();
 		try {
 			UIManager.setLookAndFeel( "com.sun.java.swing.plaf.gtk.GTKLookAndFeel" );
 		} catch (ClassNotFoundException e) {
