@@ -31,7 +31,7 @@ public class Utils {
 		createDirectories( HOME_DIR + path );
 		File f = new File(
 				String.format( "%s%s/%s_%s.png", HOME_DIR, path, filename, generateTimeStamp() ) );
-		System.out.printf( "Saved image %s", f.getPath() );
+		System.out.printf( "Saved image %s\n", f.getPath() );
 		ImageIO.write( img, "png", f );
 	}
 
@@ -50,9 +50,9 @@ public class Utils {
 		File f = new File( path );
 		if (!f.exists()) f.mkdirs();
 	}
-	
-	public static void playSound(Sound s) {
-		
+
+	public static void getWindows() {
+
 	}
 
 }
