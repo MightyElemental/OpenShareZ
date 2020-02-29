@@ -57,7 +57,7 @@ public class OSZAppFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				BufferedImage img = CaptureOperations.captureScreen( 0 );
 				try {
-					CaptureOperations.saveImage( img, "fullscreen" );
+					Utils.saveImage( img, "fullscreen" );
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -88,7 +88,7 @@ public class OSZAppFrame extends JFrame {
 				exec.schedule( () -> {
 					BufferedImage img = CaptureOperations.captureRegion();
 					try {
-						CaptureOperations.saveImage( img, "regionselect" );
+						Utils.saveImage( img, "regionselect" );
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
