@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -82,12 +84,15 @@ public class OSZAppFrame extends JFrame {
 		mntmRegion.addActionListener( new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				BufferedImage img = CaptureOperations.captureRegion();
-				try {
-					CaptureOperations.saveImage( img, "fullscreen" );
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+				ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
+				exec.schedule( () -> {
+					BufferedImage img = CaptureOperations.captureRegion();
+					try {
+						CaptureOperations.saveImage( img, "regionselect" );
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}, 1, TimeUnit.MILLISECONDS );
 			}
 		} );
 		mntmRegion.setIcon( new ImageIcon( OSZAppFrame.class

@@ -91,18 +91,31 @@ public class CaptureOperations {
 		ImageIO.write( img, "png", f );
 	}
 
+	public static BufferedImage subImage(BufferedImage img, Rectangle rect) {
+		return img.getSubimage( rect.x, rect.y, rect.width, rect.height );
+	}
+
+	private static FullscreenRegionSelectionWindow frame;
+
 	public static BufferedImage captureRegion() {
 		BufferedImage img = captureScreen( 0 );
-		try {
-			saveImage( img, "test" );
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		FullscreenRegionSelectionWindow frame = new FullscreenRegionSelectionWindow( img );
-		frame.setVisible( true );
+
+		frame = new FullscreenRegionSelectionWindow( img );
 		screens[0].setFullScreenWindow( frame );
 
-		return null;
+		while (frame == null || !frame.regionSelected) {
+			try {
+				Thread.sleep( 50 );
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		screens[0].setFullScreenWindow( null );
+		Rectangle sel = frame.selection;
+		frame.dispose();
+		frame = null;
+
+		return subImage( img, sel );
 	}
 
 }

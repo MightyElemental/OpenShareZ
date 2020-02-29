@@ -4,14 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseAdapter;
 
 public class FullscreenRegionSelectionWindow extends JFrame {
 
@@ -21,9 +21,11 @@ public class FullscreenRegionSelectionWindow extends JFrame {
 
 	private BufferedImage capture;
 
-	private Rectangle selection;
+	public Rectangle selection;
 
-	private int oldy, oldx;
+	public boolean regionSelected;
+
+	private int oldy, oldx, currentX, currentY;
 
 	private void updateSelection(int newx, int newy) {
 		if (newy - oldy < 0) {
@@ -41,11 +43,68 @@ public class FullscreenRegionSelectionWindow extends JFrame {
 		}
 	}
 
+	public void drawZoom(Graphics g) {
+		int x = Math.max( 0, currentX - 7 );
+		int y = Math.max( 0, currentY - 7 );
+		BufferedImage img = capture.getSubimage( x, y, 15, 15 );
+		g.drawImage( img, currentX + 80, currentY - 80, 150, 150, null );
+		// g.drawLine( currentX + 80, currentY + 4, currentX + 80 + 79, currentY + 4 );
+		// g.drawLine( currentX + 80 + 79 + 8, currentY + 4, currentX + 80 + 79 + 80, currentY + 4 );
+
+		for (int ix = 0; ix < 150; ix += 10) {
+			for (int iy = 0; iy < 150; iy += 10) {
+				int gridX = currentX + 80 + ix;
+				int gridY = currentY - 80 + iy;
+				if (ix == 70 && iy == 70) {
+					g.setColor( Color.white );
+					g.drawRect( gridX + 1, gridY + 1, 8, 8 );
+					g.setColor( Color.black );
+					g.drawRect( gridX, gridY, 10, 10 );
+				} else if (ix == 70 || iy == 70) {
+					g.setColor( new Color( 0.9f, 0.9f, 1f, 0.25f ) );
+					g.fillRect( gridX, gridY, 10, 10 );
+				}
+				g.setColor( new Color( 0.4f, 0.4f, 0.4f, 0.5f ) );
+				g.drawRect( gridX, gridY, 10, 10 );
+			}
+		}
+
+		g.setColor( Color.black );
+		g.drawRect( currentX + 80, currentY - 80, 150, 150 );
+		g.setColor( Color.white );
+		g.drawRect( currentX + 79, currentY - 81, 152, 152 );
+
+	}
+
+	public void drawRegion(Graphics g) {
+		g.setColor( new Color( 0.5f, 0.5f, 0.5f, 0.3f ) );
+		int width = capture.getWidth();
+		int height = capture.getHeight();
+		if (selection == null) {
+			g.fillRect( 0, 0, width, height );
+		} else {
+			g.fillRect( 0, 0, selection.x, height );
+			g.fillRect( selection.x + selection.width, 0, width - selection.x, height );
+
+			g.fillRect( selection.x, 0, selection.width, selection.y );
+			g.fillRect( selection.x, selection.y + selection.height, selection.width,
+					height - (selection.y + selection.height) );
+
+			// g.fillRect( 0, selection.y + selection.height, selection.width, selection.y );
+
+			g.setColor( Color.WHITE );
+			g.drawRect( selection.x, selection.y, selection.width, selection.height );
+		}
+
+	}
+
 	/**
 	 * Create the frame.
 	 */
 	public FullscreenRegionSelectionWindow(BufferedImage img) {
 		this.capture = img;
+		currentX = capture.getWidth() / 2;
+		currentY = capture.getHeight() / 2;
 		setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 		// setBounds( 100, 100, 450, 300 );
 		contentPane = new JPanel() {
@@ -54,29 +113,42 @@ public class FullscreenRegionSelectionWindow extends JFrame {
 
 			public void paint(Graphics g) {
 				g.drawImage( capture, 0, 0, null );
-				g.setColor( new Color( 0.5f, 0.5f, 0.5f, 0.2f ) );
-				g.fillRect( 0, 0, capture.getWidth(), capture.getHeight() );
-				if (selection != null) {
-					g.setColor( Color.DARK_GRAY );
-					g.drawRect( selection.x, selection.y, selection.width, selection.height );
-				}
+
+				drawRegion( g );
+				drawZoom( g );
 			}
 
 		};
 		contentPane.addMouseListener( new MouseAdapter() {
 
 			@Override
+			public void mouseReleased(MouseEvent e) { regionSelected = true; }
+
+			@Override
 			public void mousePressed(MouseEvent e) {
-				int x = e.getX();
-				int y = e.getY();
-				oldx = x;
-				oldy = y;
+				if (e.getButton() == 1) {
+					int x = e.getX();
+					int y = e.getY();
+					oldx = x+1;
+					oldy = y+1;
+				} else if (e.getButton() == 3) {
+
+				}
 			}
 		} );
 		contentPane.addMouseMotionListener( new MouseMotionAdapter() {
 
 			@Override
+			public void mouseMoved(MouseEvent e) {
+				currentX = e.getX();
+				currentY = e.getY();
+				contentPane.repaint();
+			}
+
+			@Override
 			public void mouseDragged(MouseEvent e) {
+				currentX = e.getX();
+				currentY = e.getY();
 
 				int x = e.getX();
 				int y = e.getY();
