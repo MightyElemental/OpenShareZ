@@ -92,7 +92,7 @@ public class FullscreenRegionSelectionWindow extends JFrame {
 
 			// g.fillRect( 0, selection.y + selection.height, selection.width, selection.y );
 
-			g.setColor( Color.WHITE );
+			g.setColor( Color.black );
 			g.drawRect( selection.x, selection.y, selection.width, selection.height );
 		}
 
@@ -132,7 +132,7 @@ public class FullscreenRegionSelectionWindow extends JFrame {
 					oldx = x+1;
 					oldy = y+1;
 				} else if (e.getButton() == 3) {
-
+					
 				}
 			}
 		} );
