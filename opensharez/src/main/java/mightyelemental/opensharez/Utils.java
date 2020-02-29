@@ -50,5 +50,9 @@ public class Utils {
 		File f = new File( path );
 		if (!f.exists()) f.mkdirs();
 	}
+	
+	public static void playSound(Sound s) {
+		
+	}
 
 }

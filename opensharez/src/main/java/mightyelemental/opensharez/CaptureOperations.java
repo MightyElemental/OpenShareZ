@@ -68,7 +68,7 @@ public class CaptureOperations {
 		Rectangle sel = frame.selection;
 		frame.dispose();
 		frame = null;
-
+		OpenShareZ.CAPTURE.play();
 		return subImage( img, sel );
 	}
 

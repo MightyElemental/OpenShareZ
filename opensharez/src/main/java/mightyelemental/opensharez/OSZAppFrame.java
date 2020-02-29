@@ -56,11 +56,13 @@ public class OSZAppFrame extends JFrame {
 
 			public void actionPerformed(ActionEvent e) {
 				BufferedImage img = CaptureOperations.captureScreen( 0 );
+				OpenShareZ.CAPTURE.play();
 				try {
 					Utils.saveImage( img, "fullscreen" );
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
+				OpenShareZ.TASK_COMPLETE.play();
 			}
 		} );
 		mntmFullscreen.setIcon( new ImageIcon( OSZAppFrame.class
