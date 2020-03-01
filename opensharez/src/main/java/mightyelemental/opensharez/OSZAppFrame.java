@@ -1,6 +1,7 @@
 package mightyelemental.opensharez;
 
 import java.awt.Color;
+import java.awt.DisplayMode;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -76,11 +77,12 @@ public class OSZAppFrame extends JFrame {
 		mnCapture.add( mnWindow );
 
 		JMenu mnMonitor = new JMenu( "Monitor" );
-		mnMonitor.setEnabled( false );
 		mnMonitor.setIcon( new ImageIcon( OSZAppFrame.class
 				.getResource( "/mightyelemental/opensharez/icons/capture/monitor.png" ) ) );
 		mnMonitor.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		mnCapture.add( mnMonitor );
+
+		registerMonitors( mnMonitor );
 
 		JMenuItem mntmRegion = new JMenuItem( "Region" );
 		mntmRegion.addActionListener( new ActionListener() {
@@ -217,4 +219,29 @@ public class OSZAppFrame extends JFrame {
 		list.setBounds( 203, 0, 213, 377 );
 		contentPane.add( list );
 	}
+
+	public void registerMonitors(JMenu mnMonitor) {
+		for (int i = 0; i < CaptureOperations.screens.length; i++) {
+			final int monNum = i;
+			DisplayMode dm = CaptureOperations.screens[i].getDisplayMode();
+			String name = String.format( "%d. %dx%d", i + 1, dm.getWidth(), dm.getHeight() );
+			JMenuItem mntmFullscreen = new JMenuItem( name );
+			mntmFullscreen.addActionListener( new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					BufferedImage img = CaptureOperations.captureScreen( monNum );
+					OpenShareZ.CAPTURE.play();
+					try {
+						Utils.saveImage( img, "fullscreen" );
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					OpenShareZ.TASK_COMPLETE.play();
+				}
+			} );
+			mntmFullscreen.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
+			mnMonitor.add( mntmFullscreen );
+		}
+	}
+
 }

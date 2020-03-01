@@ -2,6 +2,8 @@ package mightyelemental.opensharez;
 
 import static mightyelemental.opensharez.OpenShareZ.HOME_DIR;
 
+import java.awt.GraphicsDevice;
+import java.awt.MouseInfo;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -53,6 +55,19 @@ public class Utils {
 
 	public static void getWindows() {
 
+	}
+
+	public static int getCursorScreenNum() {
+		GraphicsDevice[] screens = CaptureOperations.screens;
+		int i = 0;
+		for (i = 0; i < screens.length; i++) {
+			GraphicsDevice gd = screens[i];
+			if (gd.getDefaultConfiguration().getBounds()
+					.contains( MouseInfo.getPointerInfo().getLocation() )) {
+				break;
+			}
+		}
+		return i;
 	}
 
 }

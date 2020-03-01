@@ -4,7 +4,6 @@ import java.awt.AWTException;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.MouseInfo;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
@@ -57,15 +56,7 @@ public class CaptureOperations {
 	}
 
 	public static BufferedImage captureRegion() {
-		int i = 0;
-		for (i = 0; i < screens.length; i++) {
-			GraphicsDevice gd = screens[i];
-			if (gd.getDefaultConfiguration().getBounds()
-					.contains( MouseInfo.getPointerInfo().getLocation() )) {
-				break;
-			}
-		}
-
+		int i = Utils.getCursorScreenNum();
 		BufferedImage img = captureScreen( i );
 
 		FullscreenRegionSelectionWindow frame = new FullscreenRegionSelectionWindow( img );
