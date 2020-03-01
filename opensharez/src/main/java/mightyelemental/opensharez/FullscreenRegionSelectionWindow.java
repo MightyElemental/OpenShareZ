@@ -46,7 +46,8 @@ public class FullscreenRegionSelectionWindow extends JFrame {
 	public void drawZoom(Graphics g) {
 		int x = Math.max( 0, currentX - 7 );
 		int y = Math.max( 0, currentY - 7 );
-		BufferedImage img = capture.getSubimage( x, y, 15, 15 );
+		BufferedImage img = capture.getSubimage( x, y, Math.min( capture.getWidth() - x, 15 ),
+				Math.min( capture.getHeight() - y, 15 ) );
 		g.drawImage( img, currentX + 80, currentY - 80, 150, 150, null );
 		// g.drawLine( currentX + 80, currentY + 4, currentX + 80 + 79, currentY + 4 );
 		// g.drawLine( currentX + 80 + 79 + 8, currentY + 4, currentX + 80 + 79 + 80, currentY + 4 );
