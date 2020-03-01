@@ -120,11 +120,16 @@ public class CaptureOperations {
 		BufferedImage img = captureScreen( i );
 		Rectangle sel = promptUserForRegion( img );
 
+		Utils.setDefault();// allow transparancy
+		Process ffmpeg = null;
 		try {
-			Utils.recordScreen( sel, 25, "recording_" + Utils.generateTimeStamp() + ".mp4" );
+			ffmpeg = Utils.recordScreen( sel, 25, "recording_" + Utils.generateTimeStamp() + ".mp4" );
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		RecordHUDFrame hud = new RecordHUDFrame( sel, ffmpeg );
+		hud.setVisible( true );
+		System.out.println( hud.getInsets().toString() );
 	}
 
 }
