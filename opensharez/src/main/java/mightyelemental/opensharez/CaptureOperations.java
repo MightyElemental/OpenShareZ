@@ -120,7 +120,10 @@ public class CaptureOperations {
 		BufferedImage img = captureScreen( i );
 		Rectangle sel = promptUserForRegion( img );
 
-		Utils.setDefault();// allow transparancy
+		sel.x += getScreenBounds( i ).x;
+		sel.y += getScreenBounds( i ).y;
+
+		Utils.setDefault();
 		Process ffmpeg = null;
 		try {
 			ffmpeg = Utils.recordScreen( sel, 25, "recording_" + Utils.generateTimeStamp() + ".mp4" );

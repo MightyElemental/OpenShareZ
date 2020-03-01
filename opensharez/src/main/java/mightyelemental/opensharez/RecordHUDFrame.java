@@ -1,35 +1,23 @@
 package mightyelemental.opensharez;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 
-public class RecordHUDFrame extends JFrame {
+public class RecordHUDFrame extends FixedJFrame {
 
 	private static final long serialVersionUID = -2347524198137977138L;
 
-	private Point locked;
+	FixedJFrame left   = new FixedJFrame();
+	FixedJFrame right  = new FixedJFrame();
+	FixedJFrame bottom = new FixedJFrame();
 
 	public RecordHUDFrame(Rectangle rect, Process ffmpeg) {
 		super( "Recording region..." );
-		removeNotify();
-		this.setUndecorated( true );
-		setLayout( null );
-		addNotify();
-		addComponentListener( new ComponentAdapter() {
 
-			public void componentMoved(ComponentEvent e) {
-				if (locked != null) RecordHUDFrame.this.setLocation( locked );
-			}
-		} );
 		this.addWindowListener( new WindowListener() {
 
 			@Override
@@ -37,8 +25,12 @@ public class RecordHUDFrame extends JFrame {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
+				Utils.stopRecording();
 				ffmpeg.destroy();
 				System.out.println( "stopped recording" );
+				left.dispose();
+				right.dispose();
+				bottom.dispose();
 			}
 
 			@Override
@@ -58,19 +50,31 @@ public class RecordHUDFrame extends JFrame {
 
 		} );
 		this.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-		setBackground( new Color( 0, 0, 0, 0 ) );
 		setAlwaysOnTop( true );
 		setResizable( false );
-
-		pack();
 		setLocation( rect.x - 5, rect.y - 32 );
-		locked = getLocation();// TODO: allow mouse events to pass through - even if that means using 4 jframes as a box
-		this.getContentPane().setPreferredSize( new Dimension( rect.width, rect.height + 5 ) );
+		this.getContentPane().setPreferredSize( new Dimension( rect.width, 0 ) );
 		this.pack();
+		this.setLocked( true );
 		// this.setOpacity( 0.8f );
 
-		JButton btnStop = new JButton( "Stop" );
-		btnStop.setBounds( 0, 0, 191, 377 );
+		left.setBounds( rect.x - 2, rect.y, 2, rect.height );
+		left.setVisible( true );
+		left.setLocked( true );
+		left.setResizable( false );
+		left.setAlwaysOnTop( true );
+
+		right.setBounds( rect.x + rect.width, rect.y, 2, rect.height );
+		right.setVisible( true );
+		right.setLocked( true );
+		right.setResizable( false );
+		right.setAlwaysOnTop( true );
+
+		bottom.setBounds( rect.x - 2, rect.y + rect.height, rect.width + 4, 2 );
+		bottom.setVisible( true );
+		bottom.setLocked( true );
+		bottom.setResizable( false );
+		bottom.setAlwaysOnTop( true );
 	}
 
 }

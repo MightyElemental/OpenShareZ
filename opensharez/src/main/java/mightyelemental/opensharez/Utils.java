@@ -8,6 +8,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -67,10 +69,23 @@ public class Utils {
 
 	public static Process recordScreen(Rectangle rect, int fps, String filename) throws IOException {// TODO: allow for non-linux screen recording
 		String cmd = String.format(
-				"ffmpeg -video_size %dx%d -framerate %d -f x11grab -i :0.0+%d,%d %s/%s", rect.width,
-				rect.height, fps, rect.x, rect.y, getScreenshotPath(), filename );
+				"ffmpeg -video_size %dx%d -framerate %d -f x11grab -i :0.0+%d,%d %s %s/%s", rect.width,
+				rect.height, fps, rect.x, rect.y, "-f pulse -ac 2 -i default", getScreenshotPath(),
+				filename );
 		System.out.println( cmd );
 		return Runtime.getRuntime().exec( cmd );
+	}
+
+	public static void stopRecording() {
+		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
+		exec.schedule( () -> {
+			try {
+				Runtime.getRuntime()
+						.exec( "killall --user $USER --ignore-case --signal SIGTERM  ffmpeg" );
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}, 1, TimeUnit.SECONDS );
 	}
 
 	public static int getCursorScreenNum() {
