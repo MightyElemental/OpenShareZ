@@ -32,7 +32,8 @@ public class OSZAppFrame extends JFrame {
 	 */
 	public OSZAppFrame() {
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		setBounds( 100, 100, 737, 404 );
+		setSize( 737, 404 );
+		//setBackground(new Color(0, 0, 0, 0));
 		setTitle( "OpenShareZ - Screen Share Program" );
 		this.setLocationRelativeTo( null );
 		contentPane = new JPanel();
@@ -103,6 +104,19 @@ public class OSZAppFrame extends JFrame {
 				.getResource( "/mightyelemental/opensharez/icons/capture/layer-shape.png" ) ) );
 		mntmRegion.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		mnCapture.add( mntmRegion );
+
+		JMenuItem mntmScreenRecord = new JMenuItem( "Screen recording" );
+		mntmScreenRecord.addActionListener( new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
+				exec.schedule( () -> { CaptureOperations.recordScreen(); }, 1, TimeUnit.MILLISECONDS );
+			}
+		} );
+		mntmScreenRecord.setIcon( new ImageIcon( OSZAppFrame.class
+				.getResource( "/mightyelemental/opensharez/icons/capture/camcorder-image.png" ) ) );
+		mntmScreenRecord.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
+		mnCapture.add( mntmScreenRecord );
 
 		JMenu mnUpload = new JMenu( "Upload" );
 		mnUpload.setForeground( Color.WHITE );

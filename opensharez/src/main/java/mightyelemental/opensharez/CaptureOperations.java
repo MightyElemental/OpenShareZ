@@ -7,6 +7,9 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.swing.JFrame;
 
 public class CaptureOperations {
 
@@ -55,10 +58,10 @@ public class CaptureOperations {
 		return img.getSubimage( rect.x, rect.y, rect.width, rect.height );
 	}
 
-	public static BufferedImage captureRegion() {
+	public static Rectangle promptUserForRegion(BufferedImage img) {
+		Utils.setGTK();
+		JFrame.setDefaultLookAndFeelDecorated( false );
 		int i = Utils.getCursorScreenNum();
-		BufferedImage img = captureScreen( i );
-
 		FullscreenRegionSelectionWindow frame = new FullscreenRegionSelectionWindow( img );
 		screens[i].setFullScreenWindow( frame );
 
@@ -71,13 +74,56 @@ public class CaptureOperations {
 		}
 		screens[1].setFullScreenWindow( null );
 		Rectangle sel = frame.selection;
-		if (!frame.cancelled) {
-			OpenShareZ.CAPTURE.play();
-			frame.dispose();
-			return subImage( img, sel );
-		} else {
-			frame.dispose();
+		frame.dispose();
+		if (frame.cancelled) sel = null;
+		return sel;
+	}
+
+	public static BufferedImage captureRegion() {
+		int i = Utils.getCursorScreenNum();
+		BufferedImage img = captureScreen( i );
+		Rectangle sel = promptUserForRegion( img );
+
+		if (sel == null) {
 			return null;
+		} else {
+			return subImage( img, sel );
+		}
+
+//		int i = Utils.getCursorScreenNum();
+//		BufferedImage img = captureScreen( i );
+//
+//		FullscreenRegionSelectionWindow frame = new FullscreenRegionSelectionWindow( img );
+//		screens[i].setFullScreenWindow( frame );
+//
+//		while ((frame == null || !frame.regionSelected) && !frame.cancelled) {
+//			try {
+//				Thread.sleep( 50 );
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		screens[1].setFullScreenWindow( null );
+//		Rectangle sel = frame.selection;
+//		if (!frame.cancelled) {
+//			OpenShareZ.CAPTURE.play();
+//			frame.dispose();
+//			return subImage( img, sel );
+//		} else {
+//			frame.dispose();
+//			return null;
+//		}
+	}
+
+	public static void recordScreen() {
+		int i = Utils.getCursorScreenNum();
+		BufferedImage img = captureScreen( i );
+		Rectangle sel = promptUserForRegion( img );
+
+		try {
+			Utils.recordScreen( sel, 25, "recording_" + Utils.generateTimeStamp() + ".mp4" );
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

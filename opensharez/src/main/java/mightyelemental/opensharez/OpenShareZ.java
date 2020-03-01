@@ -3,8 +3,8 @@ package mightyelemental.opensharez;
 import java.net.URISyntaxException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 public class OpenShareZ {
 
@@ -12,7 +12,18 @@ public class OpenShareZ {
 
 	public static final String HOME_DIR = System.getProperty( "user.home" );
 
-	public OpenShareZ() { OSZAppFrame frame = new OSZAppFrame(); frame.setVisible( true ); }
+	public OpenShareZ() {
+		JFrame.setDefaultLookAndFeelDecorated( true );
+		SwingUtilities.invokeLater( new Runnable() {
+
+			@Override
+			public void run() {
+				OSZAppFrame frame = new OSZAppFrame();
+				frame.setOpacity( 0.55f );
+				frame.setVisible( true );
+			}
+		} );
+	}
 
 	static {
 		try {
@@ -37,18 +48,10 @@ public class OpenShareZ {
 	}
 
 	public static void main(String[] args) {
+
+		Utils.verifySupportForTransparancy();
 		testIfRunning();
-		try {
-			UIManager.setLookAndFeel( "com.sun.java.swing.plaf.gtk.GTKLookAndFeel" );
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
+		Utils.setGTK();
 
 		new OpenShareZ();
 	}
