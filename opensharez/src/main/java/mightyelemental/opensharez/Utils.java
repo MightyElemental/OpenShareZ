@@ -88,6 +88,7 @@ public class Utils {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			OpenShareZ.TASK_COMPLETE.play();
 		}, 1, TimeUnit.SECONDS );
 	}
 
