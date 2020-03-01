@@ -49,18 +49,20 @@ public class OSZAppFrame extends JFrame {
 		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
 		exec.schedule( () -> {
 			BufferedImage img = CaptureOperations.captureRegion();
+			OpenShareZ.CAPTURE.play();
 			try {
 				String path = Utils.saveImage( img, "regionselect" );
 				Utils.showPreview( img, path );
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+			OpenShareZ.TASK_COMPLETE.play();
 		}, 1, TimeUnit.MILLISECONDS );
 	}
 
 	public void captureRecording() {
 		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
-		exec.schedule( () -> { CaptureOperations.recordScreen(); }, 1, TimeUnit.MILLISECONDS );
+		exec.schedule( () -> { CaptureOperations.startScreenRecord(); }, 1, TimeUnit.MILLISECONDS );
 	}
 
 	/**
@@ -246,6 +248,8 @@ public class OSZAppFrame extends JFrame {
 		JList<String> list = new JList<String>();
 		list.setBounds( 203, 0, 213, 377 );
 		contentPane.add( list );
+
+		registerHotkeys();
 	}
 
 	public void registerMonitors(JMenu mnMonitor) {
