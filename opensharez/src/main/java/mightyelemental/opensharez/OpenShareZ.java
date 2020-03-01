@@ -3,27 +3,13 @@ package mightyelemental.opensharez;
 import java.net.URISyntaxException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-
 public class OpenShareZ {
 
 	public static Sound ERROR, CAPTURE, TASK_COMPLETE;
 
 	public static final String HOME_DIR = System.getProperty( "user.home" );
 
-	public OpenShareZ() {
-		JFrame.setDefaultLookAndFeelDecorated( true );
-		SwingUtilities.invokeLater( new Runnable() {
-
-			@Override
-			public void run() {
-				OSZAppFrame frame = new OSZAppFrame();
-				frame.setOpacity( 0.55f );
-				frame.setVisible( true );
-			}
-		} );
-	}
+	public OpenShareZ() { OSZAppFrame frame = new OSZAppFrame(); frame.setVisible( true ); }
 
 	static {
 		try {
