@@ -19,7 +19,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
+
+import com.tulskiy.keymaster.common.HotKey;
+import com.tulskiy.keymaster.common.HotKeyListener;
+import com.tulskiy.keymaster.common.Provider;
 
 public class OSZAppFrame extends JFrame {
 
@@ -27,13 +32,41 @@ public class OSZAppFrame extends JFrame {
 
 	private JPanel contentPane;
 
+	public void fullScreenCapture() {
+		BufferedImage img = CaptureOperations.captureAllDisplays();
+		OpenShareZ.CAPTURE.play();
+		try {
+			Utils.saveImage( img, "fullscreen" );
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		OpenShareZ.TASK_COMPLETE.play();
+	}
+
+	public void regionCapture() {
+		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
+		exec.schedule( () -> {
+			BufferedImage img = CaptureOperations.captureRegion();
+			try {
+				Utils.saveImage( img, "regionselect" );
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}, 1, TimeUnit.MILLISECONDS );
+	}
+
+	public void captureRecording() {
+		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
+		exec.schedule( () -> { CaptureOperations.recordScreen(); }, 1, TimeUnit.MILLISECONDS );
+	}
+
 	/**
 	 * Create the frame.
 	 */
 	public OSZAppFrame() {
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		setSize( 737, 404 );
-		//setBackground(new Color(0, 0, 0, 0));
+		// setBackground(new Color(0, 0, 0, 0));
 		setTitle( "OpenShareZ - Screen Share Program" );
 		this.setLocationRelativeTo( null );
 		contentPane = new JPanel();
@@ -56,16 +89,7 @@ public class OSZAppFrame extends JFrame {
 		JMenuItem mntmFullscreen = new JMenuItem( "Fullscreen" );
 		mntmFullscreen.addActionListener( new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
-				BufferedImage img = CaptureOperations.captureAllDisplays();
-				OpenShareZ.CAPTURE.play();
-				try {
-					Utils.saveImage( img, "fullscreen" );
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				OpenShareZ.TASK_COMPLETE.play();
-			}
+			public void actionPerformed(ActionEvent e) { fullScreenCapture(); }
 		} );
 		mntmFullscreen.setIcon( new ImageIcon( OSZAppFrame.class
 				.getResource( "/mightyelemental/opensharez/icons/capture/layer.png" ) ) );
@@ -88,17 +112,7 @@ public class OSZAppFrame extends JFrame {
 		JMenuItem mntmRegion = new JMenuItem( "Region" );
 		mntmRegion.addActionListener( new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
-				ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
-				exec.schedule( () -> {
-					BufferedImage img = CaptureOperations.captureRegion();
-					try {
-						Utils.saveImage( img, "regionselect" );
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-				}, 1, TimeUnit.MILLISECONDS );
-			}
+			public void actionPerformed(ActionEvent e) { regionCapture(); }
 		} );
 		mntmRegion.setIcon( new ImageIcon( OSZAppFrame.class
 				.getResource( "/mightyelemental/opensharez/icons/capture/layer-shape.png" ) ) );
@@ -108,10 +122,7 @@ public class OSZAppFrame extends JFrame {
 		JMenuItem mntmScreenRecord = new JMenuItem( "Screen recording" );
 		mntmScreenRecord.addActionListener( new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
-				ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
-				exec.schedule( () -> { CaptureOperations.recordScreen(); }, 1, TimeUnit.MILLISECONDS );
-			}
+			public void actionPerformed(ActionEvent e) { captureRecording(); }
 		} );
 		mntmScreenRecord.setIcon( new ImageIcon( OSZAppFrame.class
 				.getResource( "/mightyelemental/opensharez/icons/capture/camcorder-image.png" ) ) );
@@ -256,6 +267,37 @@ public class OSZAppFrame extends JFrame {
 			mntmFullscreen.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 			mnMonitor.add( mntmFullscreen );
 		}
+	}
+
+	public void registerHotkeys() {
+		Provider provider = Provider.getCurrentProvider( true );
+		provider.register( KeyStroke.getKeyStroke( "PRINTSCREEN" ), new HotKeyListener() {
+
+			@Override
+			public void onHotKey(HotKey hotKey) {
+				System.out.println( "hotkey fullscreen screenshot" );
+				fullScreenCapture();
+			}
+
+		} );
+		provider.register( KeyStroke.getKeyStroke( "control PRINTSCREEN" ), new HotKeyListener() {
+
+			@Override
+			public void onHotKey(HotKey hotKey) {
+				System.out.println( "hotkey region screenshot" );
+				regionCapture();
+			}
+
+		} );
+		provider.register( KeyStroke.getKeyStroke( "shift PRINTSCREEN" ), new HotKeyListener() {
+
+			@Override
+			public void onHotKey(HotKey hotKey) {
+				System.out.println( "hotkey record screen" );
+				captureRecording();
+			}
+
+		} );
 	}
 
 }
