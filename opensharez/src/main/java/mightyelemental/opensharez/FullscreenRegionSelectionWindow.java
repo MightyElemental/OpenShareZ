@@ -23,7 +23,7 @@ public class FullscreenRegionSelectionWindow extends JFrame {
 
 	public Rectangle selection;
 
-	public boolean regionSelected;
+	public boolean regionSelected, cancelled;
 
 	private int oldy, oldx, currentX, currentY;
 
@@ -122,18 +122,18 @@ public class FullscreenRegionSelectionWindow extends JFrame {
 		contentPane.addMouseListener( new MouseAdapter() {
 
 			@Override
-			public void mouseReleased(MouseEvent e) { regionSelected = true; }
+			public void mouseReleased(MouseEvent e) {
+				if (selection != null) { regionSelected = true; }
+			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if (e.getButton() == 1) {
 					int x = e.getX();
 					int y = e.getY();
-					oldx = x+1;
-					oldy = y+1;
-				} else if (e.getButton() == 3) {
-					
-				}
+					oldx = x + 1;
+					oldy = y + 1;
+				} else if (e.getButton() == 3) { cancelled = true; }
 			}
 		} );
 		contentPane.addMouseMotionListener( new MouseMotionAdapter() {

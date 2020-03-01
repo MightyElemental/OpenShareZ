@@ -55,7 +55,7 @@ public class OSZAppFrame extends JFrame {
 		mntmFullscreen.addActionListener( new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				BufferedImage img = CaptureOperations.captureScreen( 0 );
+				BufferedImage img = CaptureOperations.captureAllDisplays();
 				OpenShareZ.CAPTURE.play();
 				try {
 					Utils.saveImage( img, "fullscreen" );

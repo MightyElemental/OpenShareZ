@@ -1,10 +1,10 @@
 package mightyelemental.opensharez;
 
 import java.awt.AWTException;
-import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.MouseInfo;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
@@ -13,8 +13,9 @@ public class CaptureOperations {
 
 	// public static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private static Robot           robot;
-	public static GraphicsDevice[] screens  = GraphicsEnvironment.getLocalGraphicsEnvironment()
-			.getScreenDevices();
+	public static GraphicsDevice[] screens         = GraphicsEnvironment
+			.getLocalGraphicsEnvironment().getScreenDevices();
+	public static Rectangle        maxWindowBounds = new Rectangle( 0, 0, 0, 0 );
 
 	static {
 		try {
@@ -23,6 +24,9 @@ public class CaptureOperations {
 			e.printStackTrace();
 		}
 		System.out.println( getMonitorSizes() );
+		for (GraphicsDevice gd : screens) {
+			maxWindowBounds = maxWindowBounds.union( gd.getDefaultConfiguration().getBounds() );
+		}
 	}
 
 	private static String getMonitorSizes() {
@@ -35,41 +39,55 @@ public class CaptureOperations {
 		return sb.toString();
 	}
 
-	public static Dimension getScreenDim(int screenNum) {
+	public static Rectangle getScreenBounds(int screenNum) {
 		if (screenNum > screens.length - 1 || screenNum < 0) return null;
-		DisplayMode dm = screens[screenNum].getDisplayMode();
-		return new Dimension( dm.getWidth(), dm.getHeight() );
+		return screens[screenNum].getDefaultConfiguration().getBounds();
 	}
 
-	public static BufferedImage captureScreen(int screenNum) {// TODO: adjust to account for multiple screens
-		return robot.createScreenCapture( new Rectangle( getScreenDim( screenNum ) ) );
+	public static BufferedImage captureScreen(int screenNum) {
+		return robot.createScreenCapture( getScreenBounds( screenNum ) );
+	}
+
+	public static BufferedImage captureAllDisplays() {
+		return robot.createScreenCapture( maxWindowBounds );
 	}
 
 	public static BufferedImage subImage(BufferedImage img, Rectangle rect) {
 		return img.getSubimage( rect.x, rect.y, rect.width, rect.height );
 	}
 
-	private static FullscreenRegionSelectionWindow frame;
-
 	public static BufferedImage captureRegion() {
-		BufferedImage img = captureScreen( 0 );
+		int i = 0;
+		for (i = 0; i < screens.length; i++) {
+			GraphicsDevice gd = screens[i];
+			if (gd.getDefaultConfiguration().getBounds()
+					.contains( MouseInfo.getPointerInfo().getLocation() )) {
+				break;
+			}
+		}
 
-		frame = new FullscreenRegionSelectionWindow( img );
-		screens[0].setFullScreenWindow( frame );
+		BufferedImage img = captureScreen( i );
 
-		while (frame == null || !frame.regionSelected) {
+		FullscreenRegionSelectionWindow frame = new FullscreenRegionSelectionWindow( img );
+		screens[i].setFullScreenWindow( frame );
+
+		while ((frame == null || !frame.regionSelected) && !frame.cancelled) {
 			try {
 				Thread.sleep( 50 );
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		screens[0].setFullScreenWindow( null );
+		screens[1].setFullScreenWindow( null );
 		Rectangle sel = frame.selection;
-		frame.dispose();
-		frame = null;
-		OpenShareZ.CAPTURE.play();
-		return subImage( img, sel );
+		if (!frame.cancelled) {
+			OpenShareZ.CAPTURE.play();
+			frame.dispose();
+			return subImage( img, sel );
+		} else {
+			frame.dispose();
+			return null;
+		}
 	}
 
 }
