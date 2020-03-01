@@ -115,7 +115,7 @@ public class CaptureOperations {
 //		}
 	}
 
-	public static void recordScreen() {
+	public static void startScreenRecord() {
 		int i = Utils.getCursorScreenNum();
 		BufferedImage img = captureScreen( i );
 		Rectangle sel = promptUserForRegion( img );
