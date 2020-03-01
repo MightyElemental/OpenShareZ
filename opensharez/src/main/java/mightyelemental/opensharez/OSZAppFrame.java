@@ -36,10 +36,12 @@ public class OSZAppFrame extends JFrame {
 		BufferedImage img = CaptureOperations.captureAllDisplays();
 		OpenShareZ.CAPTURE.play();
 		try {
-			Utils.saveImage( img, "fullscreen" );
+			String path = Utils.saveImage( img, "fullscreen" );
+			Utils.showPreview( img, path );
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+
 		OpenShareZ.TASK_COMPLETE.play();
 	}
 
@@ -48,7 +50,8 @@ public class OSZAppFrame extends JFrame {
 		exec.schedule( () -> {
 			BufferedImage img = CaptureOperations.captureRegion();
 			try {
-				Utils.saveImage( img, "regionselect" );
+				String path = Utils.saveImage( img, "regionselect" );
+				Utils.showPreview( img, path );
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

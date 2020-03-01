@@ -3,12 +3,6 @@ package mightyelemental.opensharez;
 import java.net.URISyntaxException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.swing.KeyStroke;
-
-import com.tulskiy.keymaster.common.HotKey;
-import com.tulskiy.keymaster.common.HotKeyListener;
-import com.tulskiy.keymaster.common.Provider;
-
 public class OpenShareZ {
 
 	public static Sound ERROR, CAPTURE, TASK_COMPLETE;
@@ -40,6 +34,7 @@ public class OpenShareZ {
 	}
 
 	public static void main(String[] args) {
+
 		Utils.verifySupportForTransparancy();
 		testIfRunning();
 		Utils.setGTK();

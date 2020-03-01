@@ -1,5 +1,9 @@
 package mightyelemental.opensharez;
 
+import static java.awt.GraphicsDevice.WindowTranslucency.PERPIXEL_TRANSLUCENT;
+import static java.awt.GraphicsDevice.WindowTranslucency.PERPIXEL_TRANSPARENT;
+import static java.awt.GraphicsDevice.WindowTranslucency.TRANSLUCENT;
+
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
@@ -15,8 +19,6 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
-import static java.awt.GraphicsDevice.WindowTranslucency.*;
 
 public class Utils {
 
@@ -37,14 +39,15 @@ public class Utils {
 				getMonth() );
 	}
 
-	public static void saveImage(BufferedImage img, String filename) throws IOException {
-		if (img == null) return;
+	public static String saveImage(BufferedImage img, String filename) throws IOException {
+		if (img == null) return null;
 
 		String path = getScreenshotPath();
 		createDirectories( path );
 		File f = new File( String.format( "%s/%s_%s.png", path, filename, generateTimeStamp() ) );
 		System.out.printf( "Saved image %s\n", f.getPath() );
 		ImageIO.write( img, "png", f );
+		return f.getPath();
 	}
 
 	public static String generateTimeStamp() {
@@ -144,6 +147,12 @@ public class Utils {
 			e.printStackTrace();
 		}
 		JFrame.setDefaultLookAndFeelDecorated( false );
+	}
+
+	public static void showPreview(BufferedImage img, String title) {
+		Preview p = new Preview( img, title );
+		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
+		exec.schedule( () -> { p.dispose(); }, 4, TimeUnit.SECONDS );
 	}
 
 }
