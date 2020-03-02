@@ -266,11 +266,12 @@ public class OSZAppFrame extends JFrame {
 					BufferedImage img = CaptureOperations.captureScreen( monNum );
 					OpenShareZ.CAPTURE.play();
 					try {
-						Utils.saveImage( img, "fullscreen" );
+						String path = Utils.saveImage( img, "monitor" + monNum );
+						Utils.showPreview( img, path );
+						OpenShareZ.TASK_COMPLETE.play();
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
-					OpenShareZ.TASK_COMPLETE.play();
 				}
 			} );
 			mntmFullscreen.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
