@@ -1,2 +1,2 @@
 # OpenShare
-A java version of ShareX, allowing it, in theory, to run on any system.
+A java version of ShareX, allowing it to, in theory, run on any system.
