@@ -139,14 +139,14 @@ public class CaptureOperations {
 		sel.y += getScreenBounds( i ).y;
 
 		Utils.setDefault();
-		Process ffmpeg = null;
 		try {
-			ffmpeg = Utils.recordScreen( sel, 25, "recording_" + Utils.generateTimeStamp() + ".mp4" );
+			Process ffmpeg = Utils.recordScreen( sel, 25,
+					"recording_" + Utils.generateTimeStamp() + ".mp4" );
+			hud = new RecordHUDFrame( sel, ffmpeg );
+			hud.setVisible( true );
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		hud = new RecordHUDFrame( sel, ffmpeg );
-		hud.setVisible( true );
 	}
 
 }

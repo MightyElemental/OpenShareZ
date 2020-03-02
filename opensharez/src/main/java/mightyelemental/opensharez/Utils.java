@@ -11,6 +11,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.ProcessBuilder.Redirect;
 import java.util.Calendar;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -76,7 +77,10 @@ public class Utils {
 				rect.height, fps, rect.x, rect.y, "-f pulse -ac 2 -i default", getScreenshotPath(),
 				filename );
 		System.out.println( cmd );
-		return Runtime.getRuntime().exec( cmd );
+		ProcessBuilder pb = new ProcessBuilder( "bash", "-c", cmd );
+		pb.redirectOutput( Redirect.INHERIT );
+		pb.redirectError( Redirect.INHERIT );
+		return pb.start();
 	}
 
 	public static int getCursorScreenNum() {
