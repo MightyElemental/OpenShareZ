@@ -1,5 +1,6 @@
 package mightyelemental.opensharez;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -12,12 +13,12 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Sound {
 
-	Clip        clip;
-	InputStream audioInStream;
+	Clip                clip;
+	BufferedInputStream audioInStream;
 
 	private Sound(InputStream f) throws LineUnavailableException {
 		clip = AudioSystem.getClip();
-		audioInStream = f;
+		audioInStream = new BufferedInputStream( f );
 	}
 
 	public static Sound soundFromFile(String path) throws URISyntaxException {
