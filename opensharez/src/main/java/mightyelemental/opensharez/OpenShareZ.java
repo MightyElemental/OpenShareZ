@@ -63,7 +63,7 @@ public class OpenShareZ {
 	}
 
 	public static void main(String[] args) {
-		Utils.stopRecording();// used to verify ffmpeg has stopped
+		Utils.stopRecording();// used to ensure ffmpeg has stopped
 		Utils.verifySupportForTransparancy();
 		testIfRunning();
 		Utils.setGTK();
