@@ -72,15 +72,21 @@ public class Utils {
 	}
 
 	public static Process recordScreen(Rectangle rect, int fps, String filename) throws IOException {// TODO: allow for non-linux screen recording
+		String audio = "-f pulse -ac 1 -i default";//-af \"aresample=async=1000\"
 		String cmd = String.format(
-				"ffmpeg -video_size %dx%d -framerate %d -f x11grab -i :0.0+%d,%d %s %s/%s", rect.width,
-				rect.height, fps, rect.x, rect.y, "-f pulse -ac 2 -i default", getScreenshotPath(),
-				filename );
+				"ffmpeg -video_size %dx%d -framerate %d -f x11grab -i :0.0+%d,%d %s -preset ultrafast -threads 0 %s/%s", rect.width,
+				rect.height, fps, rect.x, rect.y, audio, getScreenshotPath(), filename );
 		System.out.println( cmd );
 		ProcessBuilder pb = new ProcessBuilder( "bash", "-c", cmd );
 		pb.redirectOutput( Redirect.INHERIT );
 		pb.redirectError( Redirect.INHERIT );
 		return pb.start();
+	}
+
+	public static int roundToNearest16(int val) {
+		int remain = val % 16;
+		if (remain > 0) { return val += 16 - remain; }
+		return val;
 	}
 
 	public static int getCursorScreenNum() {
@@ -159,7 +165,7 @@ public class Utils {
 			}
 
 			System.out.println( "stopped recording" );
-		}, 1, TimeUnit.SECONDS );
+		}, 500, TimeUnit.MILLISECONDS );
 	}
 
 	public static void stopRecording(Process ffmpeg) {
@@ -173,7 +179,7 @@ public class Utils {
 			}
 			ffmpeg.destroy();
 			System.out.println( "stopped recording" );
-		}, 1, TimeUnit.SECONDS );
+		}, 500, TimeUnit.MILLISECONDS );
 	}
 
 }

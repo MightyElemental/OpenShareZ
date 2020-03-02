@@ -118,6 +118,7 @@ public class CaptureOperations {
 	}
 
 	private static RecordHUDFrame hud;
+	private static Process        ffmpeg;
 
 	public static void startScreenRecord() {
 		if (isRecording) {
@@ -126,13 +127,15 @@ public class CaptureOperations {
 				hud.dispose();
 				hud = null;
 			}
-			Utils.stopRecording();
+			Utils.stopRecording( ffmpeg );
 			isRecording = false;
 			return;
 		}
 		int i = Utils.getCursorScreenNum();
 		BufferedImage img = captureScreen( i );
 		Rectangle sel = promptUserForRegion( img );
+		sel.width = Utils.roundToNearest16( sel.width );
+		sel.height = Utils.roundToNearest16( sel.height );
 
 		isRecording = true;
 		sel.x += getScreenBounds( i ).x;
@@ -140,8 +143,7 @@ public class CaptureOperations {
 
 		Utils.setDefault();
 		try {
-			Process ffmpeg = Utils.recordScreen( sel, 25,
-					"recording_" + Utils.generateTimeStamp() + ".mp4" );
+			ffmpeg = Utils.recordScreen( sel, 25, "recording_" + Utils.generateTimeStamp() + ".mp4" );
 			hud = new RecordHUDFrame( sel, ffmpeg );
 			hud.setVisible( true );
 		} catch (IOException e) {
