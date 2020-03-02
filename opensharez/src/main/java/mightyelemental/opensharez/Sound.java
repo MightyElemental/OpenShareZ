@@ -1,7 +1,7 @@
 package mightyelemental.opensharez;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 
 import javax.sound.sampled.AudioInputStream;
@@ -12,24 +12,26 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Sound {
 
-	Clip clip;
-	File audioFile;
+	Clip        clip;
+	InputStream audioInStream;
 
-	private Sound(File f) throws LineUnavailableException {
+	private Sound(InputStream f) throws LineUnavailableException {
 		clip = AudioSystem.getClip();
-		audioFile = f;
+		audioInStream = f;
 	}
 
 	public static Sound soundFromFile(String path) throws URISyntaxException {
 		path = path.replace( ".", "/" );
-		File f = new File( Sound.class
-				.getResource( "/mightyelemental/opensharez/sounds/" + path + ".wav" ).toURI() );
-		if (f.exists()) {
+		InputStream file = Sound.class.getClassLoader()
+				.getResourceAsStream( "mightyelemental/opensharez/sounds/" + path + ".wav" );
+		if (file != null) {
 			try {
-				return new Sound( f );
+				return new Sound( file );
 			} catch (LineUnavailableException e) {
 				e.printStackTrace();
 			}
+		} else {
+			System.err.println( "Could not find sound file " + path );
 		}
 		return null;
 	}
@@ -39,7 +41,7 @@ public class Sound {
 		clip.close();
 		clip.setMicrosecondPosition( 0 );
 		try {
-			AudioInputStream ais = AudioSystem.getAudioInputStream( audioFile );
+			AudioInputStream ais = AudioSystem.getAudioInputStream( audioInStream );
 			clip.open( ais );
 		} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
 			e.printStackTrace();
