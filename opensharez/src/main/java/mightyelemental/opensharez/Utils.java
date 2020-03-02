@@ -79,19 +79,6 @@ public class Utils {
 		return Runtime.getRuntime().exec( cmd );
 	}
 
-	public static void stopRecording() {
-		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
-		exec.schedule( () -> {
-			try {
-				Runtime.getRuntime()
-						.exec( "killall --user $USER --ignore-case --signal SIGTERM  ffmpeg" );
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			OpenShareZ.TASK_COMPLETE.play();
-		}, 1, TimeUnit.SECONDS );
-	}
-
 	public static int getCursorScreenNum() {
 		GraphicsDevice[] screens = CaptureOperations.screens;
 		int i = 0;
@@ -151,9 +138,38 @@ public class Utils {
 	}
 
 	public static void showPreview(BufferedImage img, String title) {
+		setGTK();
 		Preview p = new Preview( img, title );
 		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
 		exec.schedule( () -> { p.dispose(); }, 4, TimeUnit.SECONDS );
+	}
+
+	public static void stopRecording() {
+		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
+		exec.schedule( () -> {
+			try {
+				Runtime.getRuntime()
+						.exec( "killall --user $USER --ignore-case --signal SIGTERM  ffmpeg" );
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			System.out.println( "stopped recording" );
+		}, 1, TimeUnit.SECONDS );
+	}
+
+	public static void stopRecording(Process ffmpeg) {
+		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
+		exec.schedule( () -> {
+			try {
+				Runtime.getRuntime()
+						.exec( "killall --user $USER --ignore-case --signal SIGTERM  ffmpeg" );
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			ffmpeg.destroy();
+			System.out.println( "stopped recording" );
+		}, 1, TimeUnit.SECONDS );
 	}
 
 }

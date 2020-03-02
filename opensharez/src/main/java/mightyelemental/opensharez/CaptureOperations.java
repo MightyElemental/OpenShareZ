@@ -19,6 +19,8 @@ public class CaptureOperations {
 			.getLocalGraphicsEnvironment().getScreenDevices();
 	public static Rectangle        maxWindowBounds = new Rectangle( 0, 0, 0, 0 );
 
+	private static boolean isRecording;
+
 	static {
 		try {
 			robot = new Robot();
@@ -115,11 +117,24 @@ public class CaptureOperations {
 //		}
 	}
 
+	private static RecordHUDFrame hud;
+
 	public static void startScreenRecord() {
+		if (isRecording) {
+			if (hud != null) {
+				hud.setVisible( false );
+				hud.dispose();
+				hud = null;
+			}
+			Utils.stopRecording();
+			isRecording = false;
+			return;
+		}
 		int i = Utils.getCursorScreenNum();
 		BufferedImage img = captureScreen( i );
 		Rectangle sel = promptUserForRegion( img );
 
+		isRecording = true;
 		sel.x += getScreenBounds( i ).x;
 		sel.y += getScreenBounds( i ).y;
 
@@ -130,9 +145,8 @@ public class CaptureOperations {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		RecordHUDFrame hud = new RecordHUDFrame( sel, ffmpeg );
+		hud = new RecordHUDFrame( sel, ffmpeg );
 		hud.setVisible( true );
-		System.out.println( hud.getInsets().toString() );
 	}
 
 }
