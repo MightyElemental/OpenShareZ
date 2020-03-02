@@ -49,14 +49,16 @@ public class OSZAppFrame extends JFrame {
 		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
 		exec.schedule( () -> {
 			BufferedImage img = CaptureOperations.captureRegion();
-			OpenShareZ.CAPTURE.play();
-			try {
-				String path = Utils.saveImage( img, "regionselect" );
-				Utils.showPreview( img, path );
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if (img != null) {
+				OpenShareZ.CAPTURE.play();
+				try {
+					String path = Utils.saveImage( img, "regionselect" );
+					Utils.showPreview( img, path );
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				OpenShareZ.TASK_COMPLETE.play();
 			}
-			OpenShareZ.TASK_COMPLETE.play();
 		}, 1, TimeUnit.MILLISECONDS );
 	}
 
