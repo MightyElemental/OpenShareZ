@@ -25,9 +25,8 @@ public class RecordHUDFrame extends FixedJFrame {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-				Utils.stopRecording();
+				Utils.stopRecording( ffmpeg );
 				ffmpeg.destroy();
-				System.out.println( "stopped recording" );
 				left.dispose();
 				right.dispose();
 				bottom.dispose();
@@ -59,22 +58,27 @@ public class RecordHUDFrame extends FixedJFrame {
 		// this.setOpacity( 0.8f );
 
 		left.setBounds( rect.x - 2, rect.y, 2, rect.height );
+		left.setType( Type.POPUP );
 		left.setVisible( true );
 		left.setLocked( true );
 		left.setResizable( false );
 		left.setAlwaysOnTop( true );
 
 		right.setBounds( rect.x + rect.width, rect.y, 2, rect.height );
+		right.setType( Type.POPUP );
 		right.setVisible( true );
 		right.setLocked( true );
 		right.setResizable( false );
 		right.setAlwaysOnTop( true );
 
 		bottom.setBounds( rect.x - 2, rect.y + rect.height, rect.width + 4, 2 );
+		bottom.setType( Type.POPUP );
 		bottom.setVisible( true );
 		bottom.setLocked( true );
 		bottom.setResizable( false );
 		bottom.setAlwaysOnTop( true );
 	}
+
+	public void dispose() { left.dispose(); right.dispose(); bottom.dispose(); super.dispose(); }
 
 }
