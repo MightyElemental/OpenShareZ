@@ -1,5 +1,7 @@
 package mightyelemental.opensharez;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.net.URISyntaxException;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -9,7 +11,34 @@ public class OpenShareZ {
 
 	public static final String HOME_DIR = System.getProperty( "user.home" );
 
-	public OpenShareZ() { OSZAppFrame frame = new OSZAppFrame(); frame.setVisible( true ); }
+	public OpenShareZ() {
+		OSZAppFrame frame = new OSZAppFrame();
+		frame.setVisible( true );
+		frame.addWindowListener( new WindowListener() {
+
+			@Override
+			public void windowOpened(WindowEvent e) {}
+
+			@Override
+			public void windowClosing(WindowEvent e) { Utils.stopRecording(); }
+
+			@Override
+			public void windowClosed(WindowEvent e) {}
+
+			@Override
+			public void windowIconified(WindowEvent e) {}
+
+			@Override
+			public void windowDeiconified(WindowEvent e) {}
+
+			@Override
+			public void windowActivated(WindowEvent e) {}
+
+			@Override
+			public void windowDeactivated(WindowEvent e) {}
+
+		} );
+	}
 
 	static {
 		try {
@@ -34,7 +63,7 @@ public class OpenShareZ {
 	}
 
 	public static void main(String[] args) {
-
+		Utils.stopRecording();// used to verify ffmpeg has stopped
 		Utils.verifySupportForTransparancy();
 		testIfRunning();
 		Utils.setGTK();
