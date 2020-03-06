@@ -16,6 +16,7 @@ public class Preview extends FixedJFrame {
 
 	public Preview(BufferedImage img, String title) {
 		super( title );
+		this.setType( Type.POPUP );
 		previewImg = img;
 		Rectangle screenBounds = GraphicsEnvironment.getLocalGraphicsEnvironment()
 				.getDefaultScreenDevice().getDefaultConfiguration().getBounds();
