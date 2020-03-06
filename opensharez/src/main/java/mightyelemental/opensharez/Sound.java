@@ -2,7 +2,6 @@ package mightyelemental.opensharez;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 
 import javax.sound.sampled.AudioInputStream;
@@ -13,28 +12,35 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Sound {
 
-	Clip                clip;
-	BufferedInputStream audioInStream;
+	String path = "";
+	Clip   clip;
 
-	private Sound(InputStream f) throws LineUnavailableException {
-		clip = AudioSystem.getClip();
-		audioInStream = new BufferedInputStream( f );
+	private Sound(String path) {
+		this.path = path;
+		try {
+			clip = AudioSystem.getClip();
+//			clip.addLineListener( e -> {
+//				if (e.getType() == LineEvent.Type.STOP) { Sound.isSoundPlaying.set( false ); }
+//			} );
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static Sound soundFromFile(String path) throws URISyntaxException {
 		path = path.replace( ".", "/" );
-		InputStream file = Sound.class.getClassLoader()
-				.getResourceAsStream( "mightyelemental/opensharez/sounds/" + path + ".wav" );
-		if (file != null) {
-			try {
-				return new Sound( file );
-			} catch (LineUnavailableException e) {
-				e.printStackTrace();
-			}
+		BufferedInputStream bis = getAudio( path );
+		if (bis != null) {
+			return new Sound( path );
 		} else {
 			System.err.println( "Could not find sound file " + path );
 		}
 		return null;
+	}
+
+	private static BufferedInputStream getAudio(String path) {
+		return new BufferedInputStream( Sound.class.getClassLoader()
+				.getResourceAsStream( "mightyelemental/opensharez/sounds/" + path + ".wav" ) );
 	}
 
 	public void play() {
@@ -42,12 +48,17 @@ public class Sound {
 		clip.close();
 		clip.setMicrosecondPosition( 0 );
 		try {
-			AudioInputStream ais = AudioSystem.getAudioInputStream( audioInStream );
+			AudioInputStream ais = AudioSystem.getAudioInputStream( getAudio( path ) );
 			clip.open( ais );
-		} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+			clip.start();
+		} catch (UnsupportedAudioFileException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 		}
-		clip.start();
+
 	}
 
 }
