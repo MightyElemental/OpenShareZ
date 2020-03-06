@@ -88,8 +88,8 @@ public class OSZAppFrame extends JFrame {
 
 		JMenu mnCapture = new JMenu( "Capture" );
 		mnCapture.setForeground( Color.WHITE );
-		mnCapture.setIcon( new ImageIcon( OSZAppFrame.class
-				.getResource( "/mightyelemental/opensharez/icons/capture/camera.png" ) ) );
+		mnCapture
+				.setIcon( new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/capture/camera.png" ) ) );
 		mnCapture.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mnCapture );
 
@@ -98,8 +98,8 @@ public class OSZAppFrame extends JFrame {
 
 			public void actionPerformed(ActionEvent e) { fullScreenCapture(); }
 		} );
-		mntmFullscreen.setIcon( new ImageIcon( OSZAppFrame.class
-				.getResource( "/mightyelemental/opensharez/icons/capture/layer.png" ) ) );
+		mntmFullscreen
+				.setIcon( new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/capture/layer.png" ) ) );
 		mntmFullscreen.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		mnCapture.add( mntmFullscreen );
 
@@ -109,8 +109,8 @@ public class OSZAppFrame extends JFrame {
 		mnCapture.add( mnWindow );
 
 		JMenu mnMonitor = new JMenu( "Monitor" );
-		mnMonitor.setIcon( new ImageIcon( OSZAppFrame.class
-				.getResource( "/mightyelemental/opensharez/icons/capture/monitor.png" ) ) );
+		mnMonitor
+				.setIcon( new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/capture/monitor.png" ) ) );
 		mnMonitor.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		mnCapture.add( mnMonitor );
 
@@ -121,8 +121,8 @@ public class OSZAppFrame extends JFrame {
 
 			public void actionPerformed(ActionEvent e) { regionCapture(); }
 		} );
-		mntmRegion.setIcon( new ImageIcon( OSZAppFrame.class
-				.getResource( "/mightyelemental/opensharez/icons/capture/layer-shape.png" ) ) );
+		mntmRegion.setIcon(
+				new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/capture/layer-shape.png" ) ) );
 		mntmRegion.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		mnCapture.add( mntmRegion );
 
@@ -131,29 +131,27 @@ public class OSZAppFrame extends JFrame {
 
 			public void actionPerformed(ActionEvent e) { captureRecording(); }
 		} );
-		mntmScreenRecord.setIcon( new ImageIcon( OSZAppFrame.class
-				.getResource( "/mightyelemental/opensharez/icons/capture/camcorder-image.png" ) ) );
+		mntmScreenRecord.setIcon(
+				new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/capture/camcorder-image.png" ) ) );
 		mntmScreenRecord.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		mnCapture.add( mntmScreenRecord );
 
 		JMenu mnUpload = new JMenu( "Upload" );
 		mnUpload.setForeground( Color.WHITE );
-		mnUpload.setIcon( new ImageIcon( OSZAppFrame.class
-				.getResource( "/mightyelemental/opensharez/icons/upload/arrow-090.png" ) ) );
+		mnUpload.setIcon(
+				new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/upload/arrow-090.png" ) ) );
 		mnUpload.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mnUpload );
 
 		JMenu mnWorkflows = new JMenu( "Workflows" );
 		mnWorkflows.setForeground( Color.WHITE );
-		mnWorkflows.setIcon( new ImageIcon(
-				OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/categories.png" ) ) );
+		mnWorkflows.setIcon( new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/categories.png" ) ) );
 		mnWorkflows.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mnWorkflows );
 
 		JMenu mnTools = new JMenu( "Tools" );
 		mnTools.setForeground( Color.WHITE );
-		mnTools.setIcon( new ImageIcon(
-				OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/toolbox.png" ) ) );
+		mnTools.setIcon( new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/toolbox.png" ) ) );
 		mnTools.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mnTools );
 
@@ -162,43 +160,42 @@ public class OSZAppFrame extends JFrame {
 
 		JMenu mnAfterCaptureTasks = new JMenu( "After capture tasks" );
 		mnAfterCaptureTasks.setForeground( Color.WHITE );
-		mnAfterCaptureTasks.setIcon( new ImageIcon( OSZAppFrame.class
-				.getResource( "/mightyelemental/opensharez/icons/upload/image-export.png" ) ) );
+		mnAfterCaptureTasks.setIcon(
+				new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/upload/image-export.png" ) ) );
 		mnAfterCaptureTasks.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mnAfterCaptureTasks );
 
 		JMenu mnAfterUploadTasks = new JMenu( "After upload tasks" );
 		mnAfterUploadTasks.setForeground( Color.WHITE );
-		mnAfterUploadTasks.setIcon( new ImageIcon( OSZAppFrame.class
-				.getResource( "/mightyelemental/opensharez/icons/upload/upload-cloud.png" ) ) );
+		mnAfterUploadTasks.setIcon(
+				new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/upload/upload-cloud.png" ) ) );
 		mnAfterUploadTasks.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mnAfterUploadTasks );
 
 		JMenu mnDestinations = new JMenu( "Destinations" );
 		mnDestinations.setForeground( Color.WHITE );
-		mnDestinations.setIcon( new ImageIcon( OSZAppFrame.class
-				.getResource( "/mightyelemental/opensharez/icons/upload/drive-globe.png" ) ) );
+		mnDestinations.setIcon(
+				new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/upload/drive-globe.png" ) ) );
 		mnDestinations.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mnDestinations );
 
 		JMenu mnApplicationSettings = new JMenu( "Application settings..." );
 		mnApplicationSettings.setForeground( Color.WHITE );
-		mnApplicationSettings.setIcon( new ImageIcon( OSZAppFrame.class
-				.getResource( "/mightyelemental/opensharez/icons/wrench-screwdriver.png" ) ) );
+		mnApplicationSettings.setIcon(
+				new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/wrench-screwdriver.png" ) ) );
 		mnApplicationSettings.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mnApplicationSettings );
 
 		JMenu mnTaskSettings = new JMenu( "Task settings..." );
 		mnTaskSettings.setForeground( Color.WHITE );
-		mnTaskSettings.setIcon( new ImageIcon(
-				OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/gear.png" ) ) );
+		mnTaskSettings.setIcon( new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/gear.png" ) ) );
 		mnTaskSettings.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mnTaskSettings );
 
 		JMenu mnHotkeySettings = new JMenu( "Hotkey settings..." );
 		mnHotkeySettings.setForeground( Color.WHITE );
-		mnHotkeySettings.setIcon( new ImageIcon(
-				OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/keyboard.png" ) ) );
+		mnHotkeySettings
+				.setIcon( new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/keyboard.png" ) ) );
 		mnHotkeySettings.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mnHotkeySettings );
 
@@ -207,43 +204,40 @@ public class OSZAppFrame extends JFrame {
 
 		JMenuItem mnScreenshotsFolder = new JMenuItem( "Screenshots folder..." );
 		mnScreenshotsFolder.setForeground( Color.WHITE );
-		mnScreenshotsFolder.setIcon( new ImageIcon( OSZAppFrame.class
-				.getResource( "/mightyelemental/opensharez/icons/folder-open-image.png" ) ) );
+		mnScreenshotsFolder.setIcon(
+				new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/folder-open-image.png" ) ) );
 		mnScreenshotsFolder.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mnScreenshotsFolder );
 
 		JMenuItem mnHistory = new JMenuItem( "History..." );
 		mnHistory.setForeground( Color.WHITE );
-		mnHistory.setIcon( new ImageIcon( OSZAppFrame.class
-				.getResource( "/mightyelemental/opensharez/icons/application-blog.png" ) ) );
+		mnHistory.setIcon(
+				new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/application-blog.png" ) ) );
 		mnHistory.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mnHistory );
 
 		JMenuItem mntmImageHistory = new JMenuItem( "Image history..." );
 		mntmImageHistory.setForeground( Color.WHITE );
-		mntmImageHistory.setIcon( new ImageIcon( OSZAppFrame.class
-				.getResource( "/mightyelemental/opensharez/icons/application-icon-large.png" ) ) );
+		mntmImageHistory.setIcon(
+				new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/application-icon-large.png" ) ) );
 		mntmImageHistory.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mntmImageHistory );
 
 		JMenuItem mntmDebug = new JMenuItem( "Debug" );
 		mntmDebug.setForeground( Color.WHITE );
-		mntmDebug.setIcon( new ImageIcon( OSZAppFrame.class
-				.getResource( "/mightyelemental/opensharez/icons/traffic-cone.png" ) ) );
+		mntmDebug.setIcon( new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/traffic-cone.png" ) ) );
 		mntmDebug.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mntmDebug );
 
 		JMenuItem mntmDonate = new JMenuItem( "Donate..." );
 		mntmDonate.setForeground( Color.WHITE );
-		mntmDonate.setIcon( new ImageIcon(
-				OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/heart.png" ) ) );
+		mntmDonate.setIcon( new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/heart.png" ) ) );
 		mntmDonate.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mntmDonate );
 
 		JMenuItem mntmAbout = new JMenuItem( "About..." );
 		mntmAbout.setForeground( Color.WHITE );
-		mntmAbout.setIcon( new ImageIcon(
-				OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/crown.png" ) ) );
+		mntmAbout.setIcon( new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/crown.png" ) ) );
 		mntmAbout.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mntmAbout );
 
@@ -284,28 +278,19 @@ public class OSZAppFrame extends JFrame {
 		provider.register( KeyStroke.getKeyStroke( "PRINTSCREEN" ), new HotKeyListener() {
 
 			@Override
-			public void onHotKey(HotKey hotKey) {
-				System.out.println( "hotkey fullscreen screenshot" );
-				fullScreenCapture();
-			}
+			public void onHotKey(HotKey hotKey) { System.out.println( "hotkey fullscreen screenshot" ); fullScreenCapture(); }
 
 		} );
 		provider.register( KeyStroke.getKeyStroke( "control PRINTSCREEN" ), new HotKeyListener() {
 
 			@Override
-			public void onHotKey(HotKey hotKey) {
-				System.out.println( "hotkey region screenshot" );
-				regionCapture();
-			}
+			public void onHotKey(HotKey hotKey) { System.out.println( "hotkey region screenshot" ); regionCapture(); }
 
 		} );
 		provider.register( KeyStroke.getKeyStroke( "shift PRINTSCREEN" ), new HotKeyListener() {
 
 			@Override
-			public void onHotKey(HotKey hotKey) {
-				System.out.println( "hotkey record screen" );
-				captureRecording();
-			}
+			public void onHotKey(HotKey hotKey) { System.out.println( "hotkey record screen" ); captureRecording(); }
 
 		} );
 	}
