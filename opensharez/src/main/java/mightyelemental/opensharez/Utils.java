@@ -8,6 +8,8 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -180,6 +182,12 @@ public class Utils {
 			ffmpeg.destroy();
 			System.out.println( "stopped recording" );
 		}, 500, TimeUnit.MILLISECONDS );
+	}
+	
+	public static void copyImageToClipboard(BufferedImage img) {
+		TransferableImage trans = new TransferableImage( img );
+      Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
+      c.setContents( trans, null );
 	}
 
 }
