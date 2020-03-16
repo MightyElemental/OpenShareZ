@@ -2,14 +2,18 @@ package mightyelemental.opensharez;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import mightyelemental.opensharez.config.ConfigManager;
 
 public class OpenShareZ {
 
 	public static Sound ERROR, CAPTURE, TASK_COMPLETE;
 
 	public static final String HOME_DIR = System.getProperty( "user.home" );
+	public static final String TITLE    = "OpenShareZ - Screen Share Program";
 
 	public OpenShareZ() {
 		OSZAppFrame frame = new OSZAppFrame();
@@ -52,9 +56,9 @@ public class OpenShareZ {
 
 	public static void testIfRunning() {
 		AtomicInteger i = new AtomicInteger( 0 );
-		ProcessHandle.allProcesses()
-				.filter( ph -> ph.info().command().isPresent()
-						&& ph.info().commandLine().get().contains( "OpenShareZ" ) )
+		ProcessHandle
+				.allProcesses().filter( ph -> ph.info().command().isPresent()
+						&& ph.info().commandLine().get().contains( "OpenShareZ" ) && ph.info().commandLine().get().contains( "java" ) )
 				.forEach( (process) -> { i.addAndGet( 1 ); } );
 		if (i.get() > 1) {
 			System.out.println( "OpenShareZ is running already" );
@@ -63,8 +67,14 @@ public class OpenShareZ {
 	}
 
 	public static void main(String[] args) {
+		try {
+			ConfigManager.createConfigFileIfNotPresent();
+			ConfigManager.loadSettings();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Utils.stopRecording();// used to ensure ffmpeg has stopped
-		Utils.verifySupportForTransparancy();
+		// Utils.verifySupportForTransparancy();
 		testIfRunning();
 		Utils.setGTK();
 

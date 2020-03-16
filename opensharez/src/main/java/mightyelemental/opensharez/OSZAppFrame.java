@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JMenu;
@@ -72,69 +74,22 @@ public class OSZAppFrame extends JFrame {
 	 */
 	public OSZAppFrame() {
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		setSize( 737, 404 );
+		setSize( 843, 515 );
 		// setBackground(new Color(0, 0, 0, 0));
-		setTitle( "OpenShareZ - Screen Share Program" );
+		setTitle( OpenShareZ.TITLE );
 		this.setLocationRelativeTo( null );
 		contentPane = new JPanel();
+		contentPane.setBackground( Color.DARK_GRAY );
 		contentPane.setBorder( new EmptyBorder( 5, 5, 5, 5 ) );
 		setContentPane( contentPane );
 		contentPane.setLayout( null );
 
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setLayout( new GridLayout( 0, 1 ) );
-		menuBar.setBounds( 0, 0, 191, 377 );
+		menuBar.setBounds( 0, 0, 191, 488 );
 		contentPane.add( menuBar );
 
-		JMenu mnCapture = new JMenu( "Capture" );
-		mnCapture.setForeground( Color.WHITE );
-		mnCapture
-				.setIcon( new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/capture/camera.png" ) ) );
-		mnCapture.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
-		menuBar.add( mnCapture );
-
-		JMenuItem mntmFullscreen = new JMenuItem( "Fullscreen" );
-		mntmFullscreen.addActionListener( new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) { fullScreenCapture(); }
-		} );
-		mntmFullscreen
-				.setIcon( new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/capture/layer.png" ) ) );
-		mntmFullscreen.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
-		mnCapture.add( mntmFullscreen );
-
-		JMenu mnWindow = new JMenu( "Window" );
-		mnWindow.setEnabled( false );
-		mnWindow.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
-		mnCapture.add( mnWindow );
-
-		JMenu mnMonitor = new JMenu( "Monitor" );
-		mnMonitor
-				.setIcon( new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/capture/monitor.png" ) ) );
-		mnMonitor.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
-		mnCapture.add( mnMonitor );
-
-		registerMonitors( mnMonitor );
-
-		JMenuItem mntmRegion = new JMenuItem( "Region" );
-		mntmRegion.addActionListener( new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) { regionCapture(); }
-		} );
-		mntmRegion.setIcon(
-				new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/capture/layer-shape.png" ) ) );
-		mntmRegion.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
-		mnCapture.add( mntmRegion );
-
-		JMenuItem mntmScreenRecord = new JMenuItem( "Screen recording" );
-		mntmScreenRecord.addActionListener( new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) { captureRecording(); }
-		} );
-		mntmScreenRecord.setIcon(
-				new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/capture/camcorder-image.png" ) ) );
-		mntmScreenRecord.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
-		mnCapture.add( mntmScreenRecord );
+		addCaptureMenu( menuBar );
 
 		JMenu mnUpload = new JMenu( "Upload" );
 		mnUpload.setForeground( Color.WHITE );
@@ -158,12 +113,7 @@ public class OSZAppFrame extends JFrame {
 		JSeparator separator = new JSeparator();
 		menuBar.add( separator );
 
-		JMenu mnAfterCaptureTasks = new JMenu( "After capture tasks" );
-		mnAfterCaptureTasks.setForeground( Color.WHITE );
-		mnAfterCaptureTasks.setIcon(
-				new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/upload/image-export.png" ) ) );
-		mnAfterCaptureTasks.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
-		menuBar.add( mnAfterCaptureTasks );
+		addAfterCaptureMenu( menuBar );
 
 		JMenu mnAfterUploadTasks = new JMenu( "After upload tasks" );
 		mnAfterUploadTasks.setForeground( Color.WHITE );
@@ -241,11 +191,94 @@ public class OSZAppFrame extends JFrame {
 		mntmAbout.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mntmAbout );
 
-		JList<String> list = new JList<String>();
-		list.setBounds( 203, 0, 213, 377 );
+		JList<String> list = new JList<String>();// TODO:THIS REALLY NEEDS SORTING
+		list.setBackground( new Color( 34, 45, 50 ) );
+		DefaultListModel<String> strList = new DefaultListModel<String>();
+		strList.addElement( "/home/james/Pictures/test.png" );
+		strList.addElement( "/home/james/Pictures/test.png" );
+		strList.addElement( "/home/james/Pictures/test.png" );
+		strList.addElement( "/home/james/Pictures/test.png" );
+		strList.addElement( "/home/james/Pictures/test.png" );
+		list.setModel( strList );
+		list.setBounds( 192, 0, 213, 488 );
 		contentPane.add( list );
 
 		registerHotkeys();
+	}
+
+	private void addAfterCaptureMenu(JMenuBar menuBar) {
+		JMenu mnAfterCaptureTasks = new JMenu( "After capture tasks" );
+		mnAfterCaptureTasks.setForeground( Color.WHITE );
+		mnAfterCaptureTasks.setIcon(
+				new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/upload/image-export.png" ) ) );
+		mnAfterCaptureTasks.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
+		menuBar.add( mnAfterCaptureTasks );
+
+		JCheckBoxMenuItem mntmCopyImageToClipboard = new JCheckBoxMenuItem( "Copy image to clipboard" );
+		mntmCopyImageToClipboard.setSelected( true );
+		mntmCopyImageToClipboard.setIcon( new ImageIcon(
+				OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/capture/clipboard-paste-image.png" ) ) );
+		mntmCopyImageToClipboard.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
+		mnAfterCaptureTasks.add( mntmCopyImageToClipboard );
+
+		JCheckBoxMenuItem mntmSaveImageToFile = new JCheckBoxMenuItem( "Save image to file" );
+		mntmSaveImageToFile.setSelected( true );
+		mntmSaveImageToFile
+				.setIcon( new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/capture/disk.png" ) ) );
+		mntmSaveImageToFile.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
+		mnAfterCaptureTasks.add( mntmSaveImageToFile );
+	}
+
+	private void addCaptureMenu(JMenuBar menuBar) {
+		JMenu mnCapture = new JMenu( "Capture" );
+		mnCapture.setForeground( Color.WHITE );
+		mnCapture
+				.setIcon( new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/capture/camera.png" ) ) );
+		mnCapture.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
+		menuBar.add( mnCapture );
+
+		JMenuItem mntmFullscreen = new JMenuItem( "Fullscreen" );
+		mntmFullscreen.addActionListener( new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) { fullScreenCapture(); }
+		} );
+		mntmFullscreen
+				.setIcon( new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/capture/layer.png" ) ) );
+		mntmFullscreen.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
+		mnCapture.add( mntmFullscreen );
+
+		JMenu mnWindow = new JMenu( "Window" );
+		mnWindow.setEnabled( false );
+		mnWindow.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
+		mnCapture.add( mnWindow );
+
+		JMenu mnMonitor = new JMenu( "Monitor" );
+		mnMonitor
+				.setIcon( new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/capture/monitor.png" ) ) );
+		mnMonitor.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
+		mnCapture.add( mnMonitor );
+
+		registerMonitors( mnMonitor );
+
+		JMenuItem mntmRegion = new JMenuItem( "Region" );
+		mntmRegion.addActionListener( new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) { regionCapture(); }
+		} );
+		mntmRegion.setIcon(
+				new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/capture/layer-shape.png" ) ) );
+		mntmRegion.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
+		mnCapture.add( mntmRegion );
+
+		JMenuItem mntmScreenRecord = new JMenuItem( "Screen recording" );
+		mntmScreenRecord.addActionListener( new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) { captureRecording(); }
+		} );
+		mntmScreenRecord.setIcon(
+				new ImageIcon( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/capture/camcorder-image.png" ) ) );
+		mntmScreenRecord.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
+		mnCapture.add( mntmScreenRecord );
 	}
 
 	public void registerMonitors(JMenu mnMonitor) {
