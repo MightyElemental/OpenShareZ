@@ -213,13 +213,7 @@ public class OSZAppFrame extends JFrame {
 		table = new JTable();
 		// table.setBackground( new Color( 34, 45, 50 ) );
 		scrollPane.setViewportView( table );
-		table.setModel( new DefaultTableModel( new Object[][] {
-				{
-						"ha", "we", "hfg", "sdf"
-				}, {
-						"123", "we", "hfg", "sdf"
-				}
-		}, new String[] {
+		table.setModel( new DefaultTableModel( new Object[][] {}, new String[] {
 				"Filename", "Status", "Progress", "URL"
 		} ) {
 
