@@ -11,18 +11,19 @@ import java.io.IOException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
-import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import com.tulskiy.keymaster.common.HotKey;
 import com.tulskiy.keymaster.common.HotKeyListener;
@@ -33,18 +34,16 @@ public class OSZAppFrame extends JFrame {
 	private static final long serialVersionUID = -6387774227145242530L;
 
 	private JPanel contentPane;
+	private JTable table;
 
 	public void fullScreenCapture() {
 		BufferedImage img = CaptureOperations.captureAllDisplays();
 		OpenShareZ.CAPTURE.play();
 		try {
-			String path = Utils.saveImage( img, "fullscreen" );
-			Utils.showPreview( img, path );
+			AfterCaptureOperations.runAfterCaptureOps( img, "fullscreen" );
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-
-		OpenShareZ.TASK_COMPLETE.play();
 	}
 
 	public void regionCapture() {
@@ -54,12 +53,10 @@ public class OSZAppFrame extends JFrame {
 			if (img != null) {
 				OpenShareZ.CAPTURE.play();
 				try {
-					String path = Utils.saveImage( img, "regionselect" );
-					Utils.showPreview( img, path );
+					AfterCaptureOperations.runAfterCaptureOps( img, "regionselect" );
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				OpenShareZ.TASK_COMPLETE.play();
 			}
 		}, 1, TimeUnit.MILLISECONDS );
 	}
@@ -191,19 +188,50 @@ public class OSZAppFrame extends JFrame {
 		mntmAbout.setFont( new Font( "Source Code Pro Medium", Font.PLAIN, 12 ) );
 		menuBar.add( mntmAbout );
 
-		JList<String> list = new JList<String>();// TODO:THIS REALLY NEEDS SORTING
-		list.setBackground( new Color( 34, 45, 50 ) );
-		DefaultListModel<String> strList = new DefaultListModel<String>();
-		strList.addElement( "/home/james/Pictures/test.png" );
-		strList.addElement( "/home/james/Pictures/test.png" );
-		strList.addElement( "/home/james/Pictures/test.png" );
-		strList.addElement( "/home/james/Pictures/test.png" );
-		strList.addElement( "/home/james/Pictures/test.png" );
-		list.setModel( strList );
-		list.setBounds( 192, 0, 213, 488 );
-		contentPane.add( list );
+		addHistoryList( contentPane );
+//		JList<String> list = new JList<String>();// TODO:THIS REALLY NEEDS SORTING
+//		list.setBackground( new Color( 34, 45, 50 ) );
+//		DefaultListModel<String> strList = new DefaultListModel<String>();
+//		strList.addElement( "/home/james/Pictures/test.png" );
+//		strList.addElement( "/home/james/Pictures/test.png" );
+//		strList.addElement( "/home/james/Pictures/test.png" );
+//		strList.addElement( "/home/james/Pictures/test.png" );
+//		strList.addElement( "/home/james/Pictures/test.png" );
+//		list.setModel( strList );
+//		list.setBounds( 192, 0, 213, 488 );
+//		contentPane.add( list );
 
 		registerHotkeys();
+	}
+
+	private void addHistoryList(JPanel contentPane) {
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds( 193, 0, 436, 488 );
+		// scrollPane.setBackground( new Color( 34, 45, 50 ) );
+		contentPane.add( scrollPane );
+
+		table = new JTable();
+		// table.setBackground( new Color( 34, 45, 50 ) );
+		scrollPane.setViewportView( table );
+		table.setModel( new DefaultTableModel( new Object[][] {
+				{
+						"ha", "we", "hfg", "sdf"
+				}, {
+						"123", "we", "hfg", "sdf"
+				}
+		}, new String[] {
+				"Filename", "Status", "Progress", "URL"
+		} ) {
+
+			private static final long serialVersionUID = 7247434836403935167L;
+			Class[]                   columnTypes      = new Class[] {
+					String.class, String.class, String.class, String.class
+			};
+
+			public Class getColumnClass(int columnIndex) { return columnTypes[columnIndex]; }
+
+			public boolean isCellEditable(int row, int column) { return false; }
+		} );
 	}
 
 	private void addAfterCaptureMenu(JMenuBar menuBar) {
@@ -292,10 +320,9 @@ public class OSZAppFrame extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					BufferedImage img = CaptureOperations.captureScreen( monNum );
 					OpenShareZ.CAPTURE.play();
+
 					try {
-						String path = Utils.saveImage( img, "monitor" + monNum );
-						Utils.showPreview( img, path );
-						OpenShareZ.TASK_COMPLETE.play();
+						AfterCaptureOperations.runAfterCaptureOps( img, "monitor" + monNum );
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
