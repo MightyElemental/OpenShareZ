@@ -61,7 +61,7 @@ public class OSZAppFrame extends JFrame {
 		}, 1, TimeUnit.MILLISECONDS );
 	}
 
-	public void captureRecording() {
+	public static void captureRecording() {
 		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
 		exec.schedule( () -> { CaptureOperations.startScreenRecord(); }, 1, TimeUnit.MILLISECONDS );
 	}
@@ -218,10 +218,14 @@ public class OSZAppFrame extends JFrame {
 		} ) {
 
 			private static final long serialVersionUID = 7247434836403935167L;
+			@SuppressWarnings("rawtypes")
 			Class[]                   columnTypes      = new Class[] {
 					String.class, String.class, String.class, String.class
 			};
 
+			@SuppressWarnings({
+					"rawtypes", "unchecked"
+			})
 			public Class getColumnClass(int columnIndex) { return columnTypes[columnIndex]; }
 
 			public boolean isCellEditable(int row, int column) { return false; }
