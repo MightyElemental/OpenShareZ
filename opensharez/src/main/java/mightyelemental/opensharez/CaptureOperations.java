@@ -15,8 +15,7 @@ public class CaptureOperations {
 
 	// public static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private static Robot           robot;
-	public static GraphicsDevice[] screens         = GraphicsEnvironment
-			.getLocalGraphicsEnvironment().getScreenDevices();
+	public static GraphicsDevice[] screens         = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
 	public static Rectangle        maxWindowBounds = new Rectangle( 0, 0, 0, 0 );
 
 	private static boolean isRecording;
@@ -28,17 +27,14 @@ public class CaptureOperations {
 			e.printStackTrace();
 		}
 		System.out.println( getMonitorSizes() );
-		for (GraphicsDevice gd : screens) {
-			maxWindowBounds = maxWindowBounds.union( gd.getDefaultConfiguration().getBounds() );
-		}
+		for (GraphicsDevice gd : screens) { maxWindowBounds = maxWindowBounds.union( gd.getDefaultConfiguration().getBounds() ); }
 	}
 
 	private static String getMonitorSizes() {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < screens.length; i++) {
 			DisplayMode dm = screens[i].getDisplayMode();
-			sb.append( String.format( "Screen %d: width: %d, height: %d\n", i, dm.getWidth(),
-					dm.getHeight() ) );
+			sb.append( String.format( "Screen %d: width: %d, height: %d\n", i, dm.getWidth(), dm.getHeight() ) );
 		}
 		return sb.toString();
 	}
@@ -48,13 +44,9 @@ public class CaptureOperations {
 		return screens[screenNum].getDefaultConfiguration().getBounds();
 	}
 
-	public static BufferedImage captureScreen(int screenNum) {
-		return robot.createScreenCapture( getScreenBounds( screenNum ) );
-	}
+	public static BufferedImage captureScreen(int screenNum) { return robot.createScreenCapture( getScreenBounds( screenNum ) ); }
 
-	public static BufferedImage captureAllDisplays() {
-		return robot.createScreenCapture( maxWindowBounds );
-	}
+	public static BufferedImage captureAllDisplays() { return robot.createScreenCapture( maxWindowBounds ); }
 
 	public static BufferedImage subImage(BufferedImage img, Rectangle rect) {
 		return img.getSubimage( rect.x, rect.y, rect.width, rect.height );
@@ -74,7 +66,7 @@ public class CaptureOperations {
 				e.printStackTrace();
 			}
 		}
-		screens[1].setFullScreenWindow( null );
+		screens[i].setFullScreenWindow( null );
 		Rectangle sel = frame.selection;
 		frame.dispose();
 		if (frame.cancelled) sel = null;
