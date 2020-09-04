@@ -88,8 +88,7 @@ public class FullscreenRegionSelectionWindow extends JFrame {
 			g.fillRect( selection.x + selection.width, 0, width - selection.x, height );
 
 			g.fillRect( selection.x, 0, selection.width, selection.y );
-			g.fillRect( selection.x, selection.y + selection.height, selection.width,
-					height - (selection.y + selection.height) );
+			g.fillRect( selection.x, selection.y + selection.height, selection.width, height - (selection.y + selection.height) );
 
 			// g.fillRect( 0, selection.y + selection.height, selection.width, selection.y );
 
@@ -123,9 +122,7 @@ public class FullscreenRegionSelectionWindow extends JFrame {
 		contentPane.addMouseListener( new MouseAdapter() {
 
 			@Override
-			public void mouseReleased(MouseEvent e) {
-				if (selection != null) { regionSelected = true; }
-			}
+			public void mouseReleased(MouseEvent e) { if (selection != null) { regionSelected = true; System.out.println( "selected" ); } }
 
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -140,11 +137,7 @@ public class FullscreenRegionSelectionWindow extends JFrame {
 		contentPane.addMouseMotionListener( new MouseMotionAdapter() {
 
 			@Override
-			public void mouseMoved(MouseEvent e) {
-				currentX = e.getX();
-				currentY = e.getY();
-				contentPane.repaint();
-			}
+			public void mouseMoved(MouseEvent e) { currentX = e.getX(); currentY = e.getY(); contentPane.repaint(); }
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
