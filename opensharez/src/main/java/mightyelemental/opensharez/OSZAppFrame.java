@@ -36,7 +36,7 @@ public class OSZAppFrame extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 
-	public void fullScreenCapture() {
+	private static void fullScreenCapture() {
 		BufferedImage img = CaptureOperations.captureAllDisplays();
 		OpenShareZ.CAPTURE.play();
 		try {
@@ -46,7 +46,7 @@ public class OSZAppFrame extends JFrame {
 		}
 	}
 
-	public void regionCapture() {
+	private static void regionCapture() {
 		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
 		exec.schedule( () -> {
 			BufferedImage img = CaptureOperations.captureRegion();
@@ -70,7 +70,7 @@ public class OSZAppFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public OSZAppFrame() {
-		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+		setDefaultCloseOperation( EXIT_ON_CLOSE );
 		setSize( 843, 515 );
 		// setBackground(new Color(0, 0, 0, 0));
 		setTitle( OpenShareZ.TITLE );

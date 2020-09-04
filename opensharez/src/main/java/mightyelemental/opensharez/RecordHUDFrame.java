@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 public class RecordHUDFrame extends FixedJFrame {
 
@@ -48,7 +48,7 @@ public class RecordHUDFrame extends FixedJFrame {
 			public void windowDeactivated(WindowEvent e) {}
 
 		} );
-		this.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+		this.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
 		setAlwaysOnTop( true );
 		setResizable( false );
 		setLocation( rect.x - 5, rect.y - 32 );

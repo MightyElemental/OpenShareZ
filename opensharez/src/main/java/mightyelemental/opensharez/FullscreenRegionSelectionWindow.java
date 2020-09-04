@@ -105,7 +105,7 @@ public class FullscreenRegionSelectionWindow extends JFrame {
 		this.capture = img;
 		currentX = capture.getWidth() / 2;
 		currentY = capture.getHeight() / 2;
-		setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+		setDefaultCloseOperation( DISPOSE_ON_CLOSE );
 		// setBounds( 100, 100, 450, 300 );
 		contentPane = new JPanel() {
 
