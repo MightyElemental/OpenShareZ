@@ -25,10 +25,7 @@ public class Utils {
 
 	private static Calendar calendar = Calendar.getInstance();
 
-	public static int getYear() {
-		calendar.setTimeInMillis( System.currentTimeMillis() );
-		return calendar.get( Calendar.YEAR );
-	}
+	public static int getYear() { calendar.setTimeInMillis( System.currentTimeMillis() ); return calendar.get( Calendar.YEAR ); }
 
 	public static int getMonth() {
 		calendar.setTimeInMillis( System.currentTimeMillis() );
@@ -36,8 +33,7 @@ public class Utils {
 	}
 
 	public static String getScreenshotPath() {
-		return String.format( "%s/Pictures/Screenshots/%4d-%02d", OpenShareZ.HOME_DIR, getYear(),
-				getMonth() );
+		return String.format( "%s/Pictures/Screenshots/%4d-%02d", OpenShareZ.HOME_DIR, getYear(), getMonth() );
 	}
 
 	public static String saveImage(BufferedImage img, String filename) throws IOException {
@@ -62,17 +58,15 @@ public class Utils {
 		return String.format( "%4d-%02d-%02d_%02d-%02d-%02d", year, month, day, hour, mins, sec );
 	}
 
-	private static void createDirectories(String path) {
-		File f = new File( path );
-		if (!f.exists()) f.mkdirs();
-	}
+	private static void createDirectories(String path) { File f = new File( path ); if (!f.exists()) f.mkdirs(); }
 
 	public static void getWindows() {
 
 	}
 
-	public static Process recordScreen(Rectangle rect, int fps, String filename) throws IOException {// TODO: allow for non-linux screen recording
-		String audio = "-f pulse -ac 1 -i default";//-af \"aresample=async=1000\"
+	public static Process recordScreen(Rectangle rect, int fps, String filename) throws IOException {// TODO: allow for non-linux
+																																		// screen recording
+		String audio = "-f pulse -ac 1 -i default";// -af \"aresample=async=1000\"
 		String cmd = String.format(
 				"ffmpeg -video_size %dx%d -framerate %d -f x11grab -i :0.0+%d,%d %s -preset ultrafast -threads 0 %s/%s", rect.width,
 				rect.height, fps, rect.x, rect.y, audio, getScreenshotPath(), filename );
@@ -94,10 +88,7 @@ public class Utils {
 		int i = 0;
 		for (i = 0; i < screens.length; i++) {
 			GraphicsDevice gd = screens[i];
-			if (gd.getDefaultConfiguration().getBounds()
-					.contains( MouseInfo.getPointerInfo().getLocation() )) {
-				break;
-			}
+			if (gd.getDefaultConfiguration().getBounds().contains( MouseInfo.getPointerInfo().getLocation() )) { break; }
 		}
 		return i;
 	}
@@ -108,8 +99,7 @@ public class Utils {
 		GraphicsDevice gd = ge.getDefaultScreenDevice();
 
 		boolean isUniformTranslucencySupported = gd.isWindowTranslucencySupported( TRANSLUCENT );
-		boolean isPerPixelTranslucencySupported = gd
-				.isWindowTranslucencySupported( PERPIXEL_TRANSLUCENT );
+		boolean isPerPixelTranslucencySupported = gd.isWindowTranslucencySupported( PERPIXEL_TRANSLUCENT );
 		boolean isShapedWindowSupported = gd.isWindowTranslucencySupported( PERPIXEL_TRANSPARENT );
 
 		System.out.println( isUniformTranslucencySupported );
@@ -158,8 +148,7 @@ public class Utils {
 		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
 		exec.schedule( () -> {
 			try {
-				Runtime.getRuntime()
-						.exec( "killall --user $USER --ignore-case --signal SIGTERM  ffmpeg" );
+				Runtime.getRuntime().exec( "killall --user $USER --ignore-case --signal SIGTERM  ffmpeg" );
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -172,14 +161,26 @@ public class Utils {
 		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
 		exec.schedule( () -> {
 			try {
-				Runtime.getRuntime()
-						.exec( "killall --user $USER --ignore-case --signal SIGTERM  ffmpeg" );
+				Runtime.getRuntime().exec( "killall --user $USER --ignore-case --signal SIGTERM  ffmpeg" );
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			ffmpeg.destroy();
 			System.out.println( "stopped recording" );
 		}, 500, TimeUnit.MILLISECONDS );
+	}
+
+	public static int[] imageToPixelArray(BufferedImage img) {
+		int width = img.getWidth(), height = img.getHeight();
+		int[] pixels = new int[width * height];
+		img.getRGB( 0, 0, width, height, pixels, 0, width );
+		return pixels;
+	}
+
+	public static BufferedImage pixelArrayToImage(int[] pixels, int width, int height) {
+		BufferedImage endImage = new BufferedImage( width, height, BufferedImage.TYPE_INT_RGB );
+		endImage.setRGB( 0, 0, width, height, pixels, 0, width );
+		return endImage;
 	}
 
 }
