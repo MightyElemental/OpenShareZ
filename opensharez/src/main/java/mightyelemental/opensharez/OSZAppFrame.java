@@ -1,9 +1,15 @@
 package mightyelemental.opensharez;
 
+import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.DisplayMode;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -11,6 +17,7 @@ import java.io.IOException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
@@ -47,11 +54,15 @@ public class OSZAppFrame extends JFrame {
 	}
 
 	private static void regionCapture() {
+		// Creates a new thread to prevent freezing
 		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
 		exec.schedule( () -> {
-			BufferedImage img = CaptureOperations.captureRegion();
+			// TODO: Allow config file for this
+			BufferedImage img = CaptureOperations.captureRegion( true );
 			if (img != null) {
 				OpenShareZ.CAPTURE.play();
+				//used to test pixelation
+				//img = ImageManipulator.pixelateImage( img, 3 );
 				try {
 					AfterCaptureOperations.runAfterCaptureOps( img, "regionselect" );
 				} catch (IOException e1) {
@@ -202,6 +213,12 @@ public class OSZAppFrame extends JFrame {
 //		contentPane.add( list );
 
 		registerHotkeys();
+		try {
+			setUpSysTray();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// TODO: Add color picker
 	}
 
 	private void addHistoryList(JPanel contentPane) {
@@ -331,7 +348,7 @@ public class OSZAppFrame extends JFrame {
 		}
 	}
 
-	public void registerHotkeys() {
+	private static void registerHotkeys() {
 		Provider provider = Provider.getCurrentProvider( true );
 		provider.register( KeyStroke.getKeyStroke( "PRINTSCREEN" ), new HotKeyListener() {
 
@@ -351,6 +368,50 @@ public class OSZAppFrame extends JFrame {
 			public void onHotKey(HotKey hotKey) { System.out.println( "hotkey record screen" ); captureRecording(); }
 
 		} );
+	}
+
+	private void toggleHide() { this.setVisible( !this.isVisible() ); }
+
+	private void setUpSysTray() throws IOException {
+		TrayIcon trayIcon = null;
+		if (SystemTray.isSupported()) {
+			// get the SystemTray instance
+			SystemTray tray = SystemTray.getSystemTray();
+			// load an image
+			Image image = ImageIO.read( OSZAppFrame.class.getResource( "/mightyelemental/opensharez/icons/ShareX_Logo.png" ) );
+			// Image image = Toolkit.getDefaultToolkit().getImage( "/mightyelemental/opensharez/icons/ShareX_Logo.png" );
+			// create a action listener to listen for default action executed on the tray icon
+			ActionListener listener = new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					// Show/hide when tray icon is clicked
+					toggleHide();
+				}
+			};
+			// create a popup menu
+			PopupMenu popup = new PopupMenu();
+			// create menu item for the default action
+			MenuItem defaultItem = new MenuItem();
+			defaultItem.addActionListener( listener );
+			popup.add( defaultItem );
+
+			// get the true tray icon size
+			int trayIconWidth = new TrayIcon( image ).getSize().width;
+			// construct a TrayIcon
+			trayIcon = new TrayIcon( image.getScaledInstance( trayIconWidth, -1, Image.SCALE_SMOOTH ), "OpenShareZ", popup );
+
+			trayIcon.addActionListener( listener );
+
+			try {
+				tray.add( trayIcon );
+			} catch (AWTException e) {
+				System.err.println( e );
+			}
+		} else {
+			// disable tray option in your application or
+			// perform other actions
+
+		}
 	}
 
 }
