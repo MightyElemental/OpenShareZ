@@ -52,7 +52,7 @@ public class CaptureOperations {
 		return img.getSubimage( rect.x, rect.y, rect.width, rect.height );
 	}
 
-	public static Rectangle promptUserForRegion(BufferedImage img) {
+	public static Rectangle promptUserForRegion(BufferedImage img, boolean showEditGUI) {
 		Utils.setGTK();
 		JFrame.setDefaultLookAndFeelDecorated( false );
 		int i = Utils.getCursorScreenNum();
@@ -73,10 +73,17 @@ public class CaptureOperations {
 		return sel;
 	}
 
-	public static BufferedImage captureRegion() {
+	/** Captures a region without editing */
+	public static BufferedImage captureRegion() { return captureRegion( false ); }
+
+	/**
+	 * @param showEditGUI whether or not to show the extra options to allow capture editing
+	 * @return the region capture with edits
+	 */
+	public static BufferedImage captureRegion(boolean showEditGUI) {
 		int i = Utils.getCursorScreenNum();
 		BufferedImage img = captureScreen( i );
-		Rectangle sel = promptUserForRegion( img );
+		Rectangle sel = promptUserForRegion( img, showEditGUI );
 
 		if (sel == null) {
 			return null;
@@ -125,7 +132,7 @@ public class CaptureOperations {
 		}
 		int i = Utils.getCursorScreenNum();
 		BufferedImage img = captureScreen( i );
-		Rectangle sel = promptUserForRegion( img );
+		Rectangle sel = promptUserForRegion( img, false );
 		sel.width = Utils.roundToNearest16( sel.width );
 		sel.height = Utils.roundToNearest16( sel.height );
 
