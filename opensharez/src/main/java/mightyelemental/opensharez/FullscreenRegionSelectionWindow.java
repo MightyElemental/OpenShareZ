@@ -43,6 +43,12 @@ public class FullscreenRegionSelectionWindow extends JFrame {
 		}
 	}
 
+	/**
+	 * Draw a zoomed in preview of where the cursor is.<br>
+	 * This is helpful for aligning the selection to an exact pixel
+	 * 
+	 * @param g the graphics object used to render to the screen
+	 */
 	public void drawZoom( Graphics g ) {
 		int x = Math.max(0, currentX - 7);
 		int y = Math.max(0, currentY - 7);
@@ -76,6 +82,13 @@ public class FullscreenRegionSelectionWindow extends JFrame {
 
 	}
 
+	/**
+	 * Draw the selected region on screen.<br>
+	 * If no region is selected, the entire screen is dimmed.<br>
+	 * If a region is selected, everything except the region is dimmed.
+	 * 
+	 * @param g the graphics object used to render to the screen
+	 */
 	public void drawRegion( Graphics g ) {
 		g.setColor(new Color(0.5f, 0.5f, 0.5f, 0.3f));
 		int width = capture.getWidth();

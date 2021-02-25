@@ -14,48 +14,49 @@ public class Preview extends FixedJFrame {
 
 	private BufferedImage previewImg;
 
-	public Preview(BufferedImage img, String title) {
-		super( title );
-		this.setType( Type.POPUP );
+	public Preview( BufferedImage img, String title ) {
+		super(title);
+		this.setType(Type.POPUP);
 		previewImg = img;
-		Rectangle screenBounds = GraphicsEnvironment.getLocalGraphicsEnvironment()
-				.getDefaultScreenDevice().getDefaultConfiguration().getBounds();
+		Rectangle screenBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds();
 		double ratio = (double) screenBounds.height / (double) screenBounds.width;
 		int width = (int) (screenBounds.width / 4f);
 		int x = screenBounds.x + screenBounds.width - width - 25;
 		int height = (int) (ratio * width);
 		int y = screenBounds.y + screenBounds.height - height - 50;
-		this.setLocation( x, y );
-		this.setSize( width, height );
-		this.setUndecorated( true );
-		System.out.printf( "%d %d %d %d\n", x, y, width, height );
-		this.setVisible( true );
-		this.setResizable( false );
-		this.setAlwaysOnTop( true );
+		this.setLocation(x, y);
+		this.setSize(width, height);
+		this.setUndecorated(true);
+		System.out.printf("%d %d %d %d\n", x, y, width, height);
+		this.setVisible(true);
+		this.setResizable(false);
+		this.setAlwaysOnTop(true);
 		this.repaint();
 		fade();
 	}
 
+	/** Schedules the preview to fade out */
 	private void fade() {// TODO:Fix fading
-		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor( 1 );
-		exec.schedule( () -> {
-			Preview.this.setOpacity( 0.5f );
+		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+		exec.schedule(() -> {
+			Preview.this.setOpacity(0.5f);
 			Preview.this.repaint();
-		}, 3, TimeUnit.SECONDS );
-		exec.schedule( () -> {
-			Preview.this.setVisible( false );
+		}, 3, TimeUnit.SECONDS);
+		exec.schedule(() -> {
+			Preview.this.setVisible(false);
 			Preview.this.dispose();
-		}, 4, TimeUnit.SECONDS );
+		}, 4, TimeUnit.SECONDS);
 	}
 
-	public void paint(Graphics g) {
+	@Override
+	public void paint( Graphics g ) {
 		if (previewImg != null) {
-			g.drawImage( previewImg, 0, 0, this.getWidth(), this.getHeight(), null );
+			g.drawImage(previewImg, 0, 0, this.getWidth(), this.getHeight(), null);
 		}
-		g.setColor( new Color( 0, 0, 0, 0.7f ) );
-		g.fillRect( 0, 0, this.getWidth(), 20 );
-		g.setColor( Color.white );
-		g.drawString( this.getTitle(), 5, 15 );
+		g.setColor(new Color(0, 0, 0, 0.7f));
+		g.fillRect(0, 0, this.getWidth(), 20);
+		g.setColor(Color.white);
+		g.drawString(this.getTitle(), 5, 15);
 	}
 
 }

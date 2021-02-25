@@ -8,9 +8,16 @@ import java.util.Arrays;
 
 public class ImageManipulator {
 
-	public static BufferedImage blurImage(BufferedImage imgToBlur, int radius) {
-		int[] pixels = Utils.imageToPixelArray( imgToBlur );
-		int[] endPixels = Arrays.copyOf( pixels, pixels.length );
+	/**
+	 * Applies a blur to the image
+	 * 
+	 * @param imgToBlur the image to apply the blur to
+	 * @param radius the blur radius
+	 * @return The blurred image
+	 */
+	public static BufferedImage blurImage( BufferedImage imgToBlur, int radius ) {
+		int[] pixels = Utils.imageToPixelArray(imgToBlur);
+		int[] endPixels = Arrays.copyOf(pixels, pixels.length);
 		int width = imgToBlur.getWidth();
 		for (int x = radius; x < width - radius; x++) {
 			for (int y = radius; y < imgToBlur.getHeight() - radius; y++) {
@@ -32,26 +39,43 @@ public class ImageManipulator {
 				endPixels[y * width + x] = rgb;
 			}
 		}
-		return Utils.pixelArrayToImage( endPixels, width, imgToBlur.getHeight() );
+		return Utils.pixelArrayToImage(endPixels, width, imgToBlur.getHeight());
 	}
 
-	public static BufferedImage blurRegion(BufferedImage orig, Rectangle blurRec) {
+	/**
+	 * Used to blur a section of an image.
+	 * 
+	 * @see #blurImage(BufferedImage, int)
+	 * 
+	 * @param orig the original image
+	 * @param blurRec the region of the image to blur
+	 * @param radius the radius of the blur
+	 * @return The image with a section blurred
+	 */
+	public static BufferedImage blurRegion( BufferedImage orig, Rectangle blurRec, int radius ) {
 		BufferedImage result = orig;
-		BufferedImage sub = orig.getSubimage( blurRec.x, blurRec.y, blurRec.width, blurRec.height );
-		BufferedImage subBlur = blurImage( sub, 10 );
+		BufferedImage sub = orig.getSubimage(blurRec.x, blurRec.y, blurRec.width, blurRec.height);
+		BufferedImage subBlur = blurImage(sub, radius);
 		Graphics g = result.getGraphics();
-		g.drawImage( subBlur, blurRec.x, blurRec.y, null );
+		g.drawImage(subBlur, blurRec.x, blurRec.y, null);
 		g.dispose();
 		return result;
 	}
 
-	public static BufferedImage pixelateImage(BufferedImage img, int rad) {
-		BufferedImage result = new BufferedImage( img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB );
+	/**
+	 * Pixelates an image
+	 * 
+	 * @param img the image to apply the pixelation to
+	 * @param radius the pixelation radius
+	 * @return The pixelated image
+	 */
+	public static BufferedImage pixelateImage( BufferedImage img, int rad ) {
+		BufferedImage result = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics g = result.getGraphics();
 		for (int x = 0; x < img.getWidth(); x += rad) {
 			for (int y = 0; y < img.getHeight(); y += rad) {
-				g.setColor( new Color( img.getRGB( x, y ) ) );
-				g.fillRect( x, y, rad, rad );
+				g.setColor(new Color(img.getRGB(x, y)));
+				g.fillRect(x, y, rad, rad);
 			}
 		}
 		g.dispose();
