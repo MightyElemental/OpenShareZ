@@ -8,6 +8,8 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -280,6 +282,18 @@ public class Utils {
 		BufferedImage endImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		endImage.setRGB(0, 0, width, height, pixels, 0, width);
 		return endImage;
+	}
+
+	/**
+	 * Copy the image to the clipboard to allow the user to paste it elsewhere.
+	 * 
+	 * @param img the image to copy to the clipboard
+	 * @see TransferableImage
+	 */
+	public static void copyImageToClipboard( BufferedImage img ) {
+		TransferableImage trans = new TransferableImage(img);
+		Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
+		c.setContents(trans, null);
 	}
 
 }
